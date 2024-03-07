@@ -1,0 +1,31 @@
+
+.h1{
+    text-align: center;
+    color: red;
+  }
+  
+.container {
+    text-align: center;
+    margin: 20px;
+    padding: 200px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .label {
+    margin-right: 10px;
+    margin-top: 10px;
+  }
+
+  .input{
+    size: 1000px;
+  }
+  .box{
+    margin-top: 100px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+ 

@@ -1,12 +1,12 @@
 import { useState } from "react"
-
+import './InputForm.css'
 
 export default function InputForm(){
 
     const [username , setUsername] = useState('');
     const [password , setPassword] = useState('');
     const [hostIp , setHostIP] = useState('');
-   
+    
     const handleClick = async () =>
     {
         try{
@@ -34,14 +34,25 @@ export default function InputForm(){
     };
 
     return(
-        <>
-        
-            <input type="text" required placeholder="Username" onChange={e => setUsername(e.target.value)}></input>
-            <input type="password" required placeholder="Password" onChange={e => setPassword(e.target.value)}></input>
-            <input type="text" required placeholder="Host IP" onChange={e => setHostIP(e.target.value)}></input>
-            <button onClick={handleClick}>Submit</button>
+        <div className="container">
+             <h1>Router Configuration</h1>
+            <div>
+                <label className="label">Enter Username: </label>
+                <input className="inputField" type="text" required placeholder="Username" onChange={e => setUsername(e.target.value)}></input>
+            </div>
+            <div>
+                <label className="label">Enter Password: </label>
+                <input className="inputField" type="password" required placeholder="Password" onChange={e => setPassword(e.target.value)}></input>
+            </div>
+            <div>
+                <label className="label">Enter Host IP: </label>
+                <input className="inputField" type="text" required placeholder="Host IP" onChange={e => setHostIP(e.target.value)}></input>
+            </div>
+            <div>
+                <button className="button" onClick={handleClick}>Submit</button>
+            </div>
 
-        </>
+        </div>
     )
 
 }
