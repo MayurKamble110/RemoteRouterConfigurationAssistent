@@ -1,5 +1,5 @@
 package com.fs.remoterouterconfigurationassistant.api;
-
+import org.springframework.web.bind.annotation.CrossOrigin;
 import com.fs.remoterouterconfigurationassistant.RouterAccessDetails;
 import com.fs.remoterouterconfigurationassistant.api.model.CommandRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
+@CrossOrigin(origins = "http://localhost:3001")
 @RestController
 @RequestMapping("/api")
 public class routerApi {
