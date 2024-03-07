@@ -6,6 +6,7 @@ import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,57 +15,74 @@ import java.util.Arrays;
 @Service
 public class routerApiService {
 
-    public StringBuilder connectToRouter(RouterAccessDetails accessDetails)
-    {
+    private Session session;
+
+    public boolean connectToRouter(RouterAccessDetails accessDetails) {
 
         String username = accessDetails.getUsername();
         String password = accessDetails.getPassword();
         String hostname = accessDetails.getHostIp();
         int port = 22; // Default SSH port
-        StringBuilder ans = new StringBuilder();
         try {
             JSch jsch = new JSch();
-            Session session = jsch.getSession(username, hostname, port);
+            session = jsch.getSession(username, hostname, port);
             session.setPassword(password);
 
             session.setConfig("StrictHostKeyChecking", "no");
 
             session.connect();
 
-            ChannelExec channelExec = (ChannelExec) session.openChannel("exec");
-            channelExec.setCommand("show interfaces");
-            channelExec.setInputStream(null);
-            channelExec.setErrStream(System.err);
+        } catch (JSchException e) {
 
-            InputStream in = channelExec.getInputStream();
-            channelExec.connect();
-
-            byte[] tmp = new byte[1024];
-            while (true) {
-                while (in.available() > 0) {
-                    int i = in.read(tmp, 0, 1024);
-                    if (i < 0) break;
-//                    ans.append(Arrays.toString(tmp));
-                    ans.append(new String(tmp, 0, i));
-                }
-                if (channelExec.isClosed()) {
-                    if (in.available() > 0) continue;
-                    System.out.println("exit-status: " + channelExec.getExitStatus());
-                    break;
-                }
-                try {
-                    Thread.sleep(1000);
-                } catch (Exception ee) {
-                }
-            }
-            channelExec.disconnect();
-            session.disconnect();
-
-        } catch (Exception e) {
-            System.out.println(e);
-            return new StringBuilder("FAILED");
-//            e.printStackTrace();
+            return false;
         }
-        return ans;
+
+        return true;
+    }
+
+
+    public String executeCommandOnRouter(String command) {
+        StringBuilder output = new StringBuilder();
+        System.out.println(session);
+        try {
+            if (session != null && session.isConnected()) {
+                ChannelExec channelExec = (ChannelExec) session.openChannel("exec");
+                channelExec.setCommand(command);
+                channelExec.setErrStream(System.err);
+
+                InputStream in = channelExec.getInputStream();
+                channelExec.connect();
+
+                byte[] buffer = new byte[1024];
+                int bytesRead;
+                while ((bytesRead = in.read(buffer)) != -1) {
+                    output.append(new String(buffer, 0, bytesRead));
+                }
+
+                channelExec.disconnect();
+            } else {
+                output.append("SSH session is not established.");
+            }
+        } catch (JSchException | IOException e) {
+            e.printStackTrace();
+            output.append("Error executing command: ").append(e.getMessage());
+        }
+        return output.toString();
+    }
+
+
+    public String disconnectSSH() {
+
+        if (session == null) {
+            return "CONNECTION NOT PRESENT";
+        } else if (session != null && session.isConnected()) {
+            session.disconnect();
+            return "DISCONNECTED FROM ROUTER";
+        }
+
+
+        return "FAILED TO DISCONNECT FROM ROUTER";
+
+
     }
 }
