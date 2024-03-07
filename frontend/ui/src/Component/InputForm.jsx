@@ -1,16 +1,17 @@
 import { useState } from "react"
 import './InputForm.css'
+import { useNavigate } from "react-router-dom";
 
 export default function InputForm(){
 
     const [username , setUsername] = useState('');
     const [password , setPassword] = useState('');
     const [hostIp , setHostIP] = useState('');
-    
+    const navigate = useNavigate();
     const handleClick = async () =>
     {
         try{
-            const response = await fetch('http://localhost:8080/connect',{
+            const response = await fetch('http://localhost:8080/api/connect',{
                 method : 'POST',
                 headers : {
                     'Content-Type' : 'application/json',
@@ -25,6 +26,10 @@ export default function InputForm(){
              const data = await response.text();
 
              console.log(data)
+             if(data==='1'){
+                navigate('/commands');
+             }
+             
 ; 
         }
         catch(e)
