@@ -22,7 +22,7 @@ public class routerApi {
         boolean response = routerApiService.connectToRouter(accessDetails);
 
 
-        return response ? "CONNECTED" : "CONNECTION_FAILED";
+        return response ? "1" : "0" ;
     }
 
     @PostMapping(path = "/commands")
