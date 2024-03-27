@@ -1,7 +1,6 @@
 package com.fs.remoterouterconfigurationassistant;
 
 public class RouterAccessDetails {
-
     private  String username;
     private  String password;
     private  String hostIp;
