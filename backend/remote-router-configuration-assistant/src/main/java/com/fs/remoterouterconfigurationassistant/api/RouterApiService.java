@@ -13,7 +13,7 @@ import java.io.InputStream;
 import java.util.Arrays;
 
 @Service
-public class routerApiService {
+public class RouterApiService {
 
     private Session session;
 
@@ -33,7 +33,7 @@ public class routerApiService {
             session.connect();
 
         } catch (JSchException e) {
-
+            System.out.println(e);
             return false;
         }
 
