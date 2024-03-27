@@ -1,2 +1,6 @@
-# flask server
+# API key
 .env
+# venv directory
+venv/
+# __pycache__ directory
+__pycache__/
