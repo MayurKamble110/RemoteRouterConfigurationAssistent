@@ -4,7 +4,6 @@ from flask.json import jsonify
 import google.generativeai as genai
 import os
 import dotenv
-import json
 
 
 dotenv.load_dotenv()
@@ -19,13 +18,14 @@ app = Flask (__name__)
 def hello_world():
     return "Hello World"
 
-@app.route("/",methods=['POST'])
+@app.route("/ask_ai",methods=['POST'])
 def generate():
     data = request.get_json()
     text = data['text']
     prompt = data['prompt'] 
     response = model.generate_content(text + prompt)
-    return str(response.text)
+    cleaned_response = (str(response.text).replace('**',''))
+    return cleaned_response
 
 
 
