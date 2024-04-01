@@ -1,5 +1,5 @@
 
-const devices = [
+const DEVICES = [
     {
         name : 'DEVICE 1',
         ip_address : '123456789',
@@ -32,4 +32,6 @@ const devices = [
         os : 'Linux',
         os_version : '8.3'
     }
-]
+];
+
+export default DEVICES;
