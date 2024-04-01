@@ -1,7 +1,9 @@
+import Device from "./Component/Device";
+
 function App() {
   return (
     <div>
-      <h1>This is React BoilerPlate code</h1>
+       <Device></Device>
     </div>
   );
 }
