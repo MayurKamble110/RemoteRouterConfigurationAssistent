@@ -1,10 +1,12 @@
 import Device from "./Component/Device";
+import Navbar from "./components/Navbar";
 
 function App() {
   return (
     <div>
-       <Device></Device>
-    </div>
+      <Navbar/>
+      <Device/>   
+   </div>
   );
 }
 
