@@ -16,6 +16,7 @@ export default function Device()
 
     return(
         <>
+        <Dialog ref={dialog}></Dialog>
         <div id = 'device'>
              <h1>Devices</h1>
              <button className="add-button" onClick={handleAddDevice}>Add Device</button>
