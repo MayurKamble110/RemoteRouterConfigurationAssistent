@@ -1,0 +1,35 @@
+.card {
+    border-radius: 8px;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    padding: 20px;
+    margin: 25px;
+    width: 200px;
+  }
+  
+  .card img {
+    margin-left: 20%;
+    max-width: 60%;
+    border-radius: 8px;
+    
+  }
+  
+  .card p {
+    margin: 5px 0;
+    font-size: 16px;
+    color: #333333;
+  }
+  
+  .card p:first-child {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .card p:nth-child(odd) {
+    color: #666666;
+  }
+  
+  .card p:last-child {
+    font-style: italic;
+  }
+  
