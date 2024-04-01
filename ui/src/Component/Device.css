@@ -16,3 +16,14 @@
 .add-button:hover{
     background-color: #0047cc;
 }
+  
+#cards {
+    display: flex;
+    flex-direction: column;
+  }
+
+  #cards ul{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content:baseline;
+  }
