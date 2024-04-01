@@ -1,5 +1,5 @@
 import Device from "./Component/Device";
-import Navbar from "./components/Navbar";
+import Navbar from "./Component/Navbar";
 
 function App() {
   return (
