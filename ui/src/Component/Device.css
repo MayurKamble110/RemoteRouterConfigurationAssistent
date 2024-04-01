@@ -4,6 +4,10 @@
     align-items: center;
 }
 
+#device h1{
+    padding: 1rem;
+}
+
 .add-button {
     background-color: #008cff;
     color: #fff;

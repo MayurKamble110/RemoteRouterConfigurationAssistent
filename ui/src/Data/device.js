@@ -36,4 +36,6 @@ export const DEVICES = [
         os : 'Linux',
         os_version : '8.4'
     }
-]
+];
+
+export default DEVICES;
