@@ -1,6 +1,7 @@
 package com.fs.remoterouterconfigurationassistant.api;
 
 import com.fs.remoterouterconfigurationassistant.RouterAccessDetails;
+import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 @Service
@@ -40,18 +42,26 @@ public class RouterApiService {
         return true;
     }
 
-
-    public String executeCommandOnRouter(String command) {
+    public String executeCommandOnRouter() {
         StringBuilder output = new StringBuilder();
         System.out.println(session);
+
         try {
             if (session != null && session.isConnected()) {
-                ChannelExec channelExec = (ChannelExec) session.openChannel("exec");
-                channelExec.setCommand(command);
-                channelExec.setErrStream(System.err);
+                Channel channel = session.openChannel("exec");
 
-                InputStream in = channelExec.getInputStream();
-                channelExec.connect();
+
+                    ((ChannelExec)channel).setCommand("show interfaces && show version");
+
+
+//                channelExec.setCommand(command);
+//                channelExec.setErrStream(System.err);
+
+                channel.setInputStream(null);
+
+                ((ChannelExec)channel).setErrStream(System.err);
+                InputStream in = channel.getInputStream();
+                channel.connect();
 
                 byte[] buffer = new byte[1024];
                 int bytesRead;
@@ -59,7 +69,7 @@ public class RouterApiService {
                     output.append(new String(buffer, 0, bytesRead));
                 }
 
-                channelExec.disconnect();
+                channel.disconnect();
             } else {
                 output.append("SSH session is not established.");
             }
@@ -67,6 +77,8 @@ public class RouterApiService {
             e.printStackTrace();
             output.append("Error executing command: ").append(e.getMessage());
         }
+        System.out.println(output);
+
         return output.toString();
     }
 
@@ -79,7 +91,6 @@ public class RouterApiService {
             session.disconnect();
             return "DISCONNECTED FROM ROUTER";
         }
-
 
         return "FAILED TO DISCONNECT FROM ROUTER";
 

@@ -17,6 +17,44 @@
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>5.6.0.Final</version> <!-- Use the latest version available -->
+		</dependency>
+		<!-- JPA API -->
+		<dependency>
+			<groupId>jakarta.persistence</groupId>
+			<artifactId>jakarta.persistence-api</artifactId>
+			<version>3.1.0</version> <!-- Use the appropriate version for your project -->
+		</dependency>
+		<!-- JDBC Driver (if not already provided by your application server) -->
+		<dependency>
+			<groupId>org.postgresql</groupId> <!-- Example for PostgreSQL -->
+			<artifactId>postgresql</artifactId>
+			<version>42.3.1</version> <!-- Use the appropriate version for your database -->
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.10.1</version> <!-- Use the latest version -->
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>6.1.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-jpa</artifactId>
+			<version>2.6.0</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -28,10 +66,6 @@
 			<scope>test</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>org.springframework.ai</groupId>
-			<artifactId>spring-ai-vertex-ai-spring-boot-starter</artifactId>
-		</dependency>
 
 		<dependency>
 			<groupId>com.jcraft</groupId>
@@ -44,20 +78,26 @@
 			<artifactId>google-cloud-vertexai</artifactId>
 			<version>0.4.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
 
 	</dependencies>
 
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.springframework.ai</groupId>
-				<artifactId>spring-ai-bom</artifactId>
-				<version>${spring-ai.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
+<!--	<dependencyManagement>-->
+<!--		<dependencies>-->
+<!--			<dependency>-->
+<!--				<groupId>org.springframework.ai</groupId>-->
+<!--				<artifactId>spring-ai-bom</artifactId>-->
+<!--				<version>${spring-ai.version}</version>-->
+<!--				<type>pom</type>-->
+<!--				<scope>import</scope>-->
+<!--			</dependency>-->
+<!--		</dependencies>-->
+<!--	</dependencyManagement>-->
 
 	<build>
 		<plugins>
