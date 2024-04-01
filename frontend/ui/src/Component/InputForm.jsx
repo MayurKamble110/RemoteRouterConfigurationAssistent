@@ -26,7 +26,7 @@ export default function InputForm(){
             
              const data = await response.text();
 
-            if(data === '1')
+            if(data)
             {
                 navigate('/commands');
             }
