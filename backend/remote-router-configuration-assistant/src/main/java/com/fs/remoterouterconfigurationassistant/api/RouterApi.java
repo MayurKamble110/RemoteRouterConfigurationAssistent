@@ -27,6 +27,8 @@ public class RouterApi {
     @Autowired
     RouterApiService routerApiService;
 
+    @Autowired
+    ShowInterfaceRepositoryService service;
 
     @PostMapping(path = "/connect")
     public String makeSSHConnectionToRouter(@RequestBody RouterAccessDetails accessDetails) {
@@ -499,8 +501,6 @@ public class RouterApi {
 
     private void test(String[] list)
     {
-        ShowInterfaceRepositoryService service = new ShowInterfaceRepositoryService();
-
         service.addInterfacesToDatabase(list);
     }
     private String makeApiCallToFlaskServer(FlaskServerApiRequestBody body) {
@@ -562,7 +562,7 @@ public class RouterApi {
                                                 "0 lost carrier, 0 no carrier, 0 pause output\\n" +
                                                 "0 output buffer failures, 0 output buffers swapped out\\n"
                         """);
-    ShowInterfaceRepositoryService service = new ShowInterfaceRepositoryService();
+   // ShowInterfaceRepositoryService service = new ShowInterfaceRepositoryService();
         //service.addInterfacesToDatabase(list);
     }
 }
