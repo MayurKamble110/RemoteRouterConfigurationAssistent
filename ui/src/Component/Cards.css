@@ -6,6 +6,11 @@
     margin: 25px;
     width: 200px;
   }
+
+  .card-wrapper {
+    position: relative;
+    display: inline-block;
+}
   
   .card img {
     margin-left: 20%;
@@ -32,4 +37,20 @@
   .card p:last-child {
     font-style: italic;
   }
-  
+
+  .popup-content {
+    display: none;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 2;
+}
+
+.card-wrapper:hover .popup-content {
+    display: block;
+}
