@@ -1,7 +1,7 @@
 import './Cards.css'
 export default function Cards(props){
     return (
-       <div className='card-wrapper'>
+       <div className='card-wrapper' onClick={props.onCardClick}>   
         <div className='card'>
             <img src = {props.image} alt = {props.name} />
             <div className='card-content'>
@@ -14,7 +14,7 @@ export default function Cards(props){
             <p>Hardware: {props.hardware}</p> 
             <p>OS: {props.os}</p> 
             <p>OS Version: {props.os_version}</p> 
-            </div>
+        </div>
        </div>
     ) 
 }
