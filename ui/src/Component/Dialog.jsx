@@ -1,9 +1,9 @@
-import { forwardRef, useImperativeHandle, useRef } from "react"
+import { forwardRef, useEffect, useImperativeHandle, useRef } from "react"
 import './Dialog.css';
 import DEVICES from "../Data/device";
 import { useState } from "react";
 
-const Dialog = forwardRef(function Dialog(props,ref){
+function Dialog(props,ref){
 
     const modal = useRef();
     const [formData, setFormData] = useState({
@@ -12,18 +12,19 @@ const Dialog = forwardRef(function Dialog(props,ref){
         loginPassword: '',
         enablePassword: ''
     });
-
-    useImperativeHandle(ref, () => {
-        return {
-          open: () => {
+    
+    useEffect(()=>{
+        if(props.open){
             modal.current.showModal();
-          }
-        };
-      });
+        }
+        else{
+            modal.current.close();
+        }
+    },[props.open])
 
     function handleCloseModal()
     {   
-        modal.current.close();
+        props.onClose();
     }
 
     const handleChange = (event) => {
@@ -35,8 +36,9 @@ const Dialog = forwardRef(function Dialog(props,ref){
     };
 
     return(
-        <dialog id = 'dialog' ref={modal}>
+        <dialog id = 'dialog' ref={modal} onClose={props.onClose}>
             <h2>Add Device</h2>
+            <button onClick={props.onClose} className="close-button">X</button>
             <form className="modal-form">
                 <div>
                     <label>Username</label>
@@ -58,6 +60,6 @@ const Dialog = forwardRef(function Dialog(props,ref){
             </form>
         </dialog>
     )
-});
+}
 
 export default Dialog;

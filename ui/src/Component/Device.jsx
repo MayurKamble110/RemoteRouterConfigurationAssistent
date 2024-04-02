@@ -7,16 +7,21 @@ import Dialog from "./Dialog";
 export default function Device()
 {
     const [ data , setData] = useState([]);
-    const dialog = useRef();
+    const[isModalOpen , setIsModalOpen] = useState(false);
 
     function handleAddDevice()
     {
-        dialog.current.open();
+        setIsModalOpen(true);
+    }
+
+    function handleCloseModal()
+    {
+        setIsModalOpen(false);
     }
 
     return(
         <>
-        <Dialog ref={dialog}></Dialog>
+        <Dialog open={isModalOpen} onClose={handleCloseModal}></Dialog>
         <div id = 'device'>
              <h1>Devices</h1>
              <button className="add-button" onClick={handleAddDevice}>Add Device</button>
