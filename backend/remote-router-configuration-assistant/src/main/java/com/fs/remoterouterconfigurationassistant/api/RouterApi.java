@@ -53,6 +53,11 @@ public class RouterApi {
 
         return routerApiService.disconnectSSH();
     }
-
+    @PostMapping("/test")
+    public String test()
+    {
+        service.addInterfacesToDatabase("");
+        return "Hi";
+    }
 
 }

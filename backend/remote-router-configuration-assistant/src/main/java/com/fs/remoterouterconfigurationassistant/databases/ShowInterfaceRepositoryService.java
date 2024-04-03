@@ -1,14 +1,7 @@
 package com.fs.remoterouterconfigurationassistant.databases;
 
-import java.util.ArrayList;
-
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-
 import com.fs.remoterouterconfigurationassistant.api.model.FlaskServerApiRequestBody;
 import com.fs.remoterouterconfigurationassistant.api.model.RouterInterfaceResponceDto;
 import com.fs.remoterouterconfigurationassistant.api.routerCommands.ShowInterfaces;
@@ -22,6 +15,7 @@ public class ShowInterfaceRepositoryService {
     private ShowInterfaceRepository repository;
 
     public void addInterfacesToDatabase(String responce) {
+
         String[] interfaces = ShowInterfaces.parseData(responce);
 
         for (String data : interfaces) {
