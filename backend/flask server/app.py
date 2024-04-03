@@ -18,7 +18,11 @@ app = Flask (__name__)
 def hello_world():
     return "Hello World"
 
+<<<<<<< HEAD
+@app.route("/getjson",methods=['POST'])
+=======
 @app.route("/ask_ai",methods=['POST'])
+>>>>>>> a25e9a5d3130c8c0a3231f9697bdad3c6e7f1f94
 def generate():
     data = request.get_json()
     text = data['text']
