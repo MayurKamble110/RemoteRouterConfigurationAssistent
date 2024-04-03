@@ -12,7 +12,7 @@ import com.fs.remoterouterconfigurationassistant.api.model.RouterInterfaceRespon
 
 public class FlaskServer {
 
-    public static final String flaskServerApiEndpoint = "http://localhost:5000/getjson";
+    public static final String flaskServerApiEndpoint = "http://localhost:5000/ask-ai";
     public static RouterInterfaceResponceDto makeRequest(FlaskServerApiRequestBody body) {
 
         ObjectMapper objectMapper = new ObjectMapper();
