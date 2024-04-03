@@ -4,3 +4,4 @@
 venv/
 # __pycache__ directory
 __pycache__/
+/*.pyc
