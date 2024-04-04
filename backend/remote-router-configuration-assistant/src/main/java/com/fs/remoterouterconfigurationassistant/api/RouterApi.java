@@ -1,6 +1,7 @@
 package com.fs.remoterouterconfigurationassistant.api;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -13,8 +14,10 @@ import com.fs.remoterouterconfigurationassistant.api.model.CommandRequest;
 import com.fs.remoterouterconfigurationassistant.api.model.FlaskServerApiRequestBody;
 import com.fs.remoterouterconfigurationassistant.api.model.NewDevice;
 import com.fs.remoterouterconfigurationassistant.databases.ShowInterfaceRepositoryService;
+import com.fs.remoterouterconfigurationassistant.databases.entities.NetworkDeviceDao;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -63,6 +66,17 @@ public class RouterApi {
 
         return "1";
     }
+
+    @GetMapping(path = "/get-router-data")
+    public List<NetworkDeviceDao>  getAllRouterData()
+    {
+        List<NetworkDeviceDao>  networkDeviceDaoList = routerApiService.getAllNetworkDevices();
+        System.out.println(networkDeviceDaoList);
+
+        return networkDeviceDaoList;
+
+    }
+
 //    @PostMapping("/test")
 //    public String test()
 //    {
