@@ -1,13 +1,13 @@
-import Cards from "./Component/Cards";
 import Device from "./Component/Device";
+import InfoTable from "./Component/InfoTable";
 import Navbar from "./Component/Navbar";
-import { DEVICES } from "./Data/device";
 
 function App() {
   return (
     <div>
       <Navbar/>
       <Device/>
+      <InfoTable/>
    </div>
   );
 }
