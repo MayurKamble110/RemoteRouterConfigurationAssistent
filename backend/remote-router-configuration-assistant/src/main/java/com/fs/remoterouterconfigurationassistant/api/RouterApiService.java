@@ -4,6 +4,7 @@ import com.fs.remoterouterconfigurationassistant.RouterAccessDetails;
 import com.fs.remoterouterconfigurationassistant.api.model.CommandRequest;
 import com.fs.remoterouterconfigurationassistant.api.model.NewDevice;
 import com.fs.remoterouterconfigurationassistant.api.routerCommands.RouterCommandInterpreter;
+import com.fs.remoterouterconfigurationassistant.databases.NetworkDeviceRepository;
 import com.fs.remoterouterconfigurationassistant.databases.NetworkDeviceRepositoryService;
 import com.fs.remoterouterconfigurationassistant.databases.entities.NetworkDeviceDao;
 import com.jcraft.jsch.Channel;
@@ -20,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class RouterApiService {
@@ -30,6 +32,9 @@ public class RouterApiService {
 
     @Autowired
     NetworkDeviceRepositoryService networkDeviceRepositoryService;
+
+    @Autowired
+    NetworkDeviceRepository networkDeviceRepository;
     public boolean connectToRouter(RouterAccessDetails accessDetails) {
         String username = accessDetails.getUsername();
         String password = accessDetails.getPassword();
@@ -537,5 +542,10 @@ public class RouterApiService {
 
         networkDeviceRepositoryService.addNetworkDeviceToDatabase(dao);
 
+    }
+
+    public List<NetworkDeviceDao> getAllNetworkDevices()
+    {
+        return networkDeviceRepository.findAll();
     }
 }
