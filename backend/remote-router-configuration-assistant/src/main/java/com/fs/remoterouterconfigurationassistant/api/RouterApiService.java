@@ -1,7 +1,10 @@
 package com.fs.remoterouterconfigurationassistant.api;
 
 import com.fs.remoterouterconfigurationassistant.RouterAccessDetails;
+import com.fs.remoterouterconfigurationassistant.api.model.NewDevice;
 import com.fs.remoterouterconfigurationassistant.api.routerCommands.RouterCommandInterpreter;
+import com.fs.remoterouterconfigurationassistant.databases.NetworkDeviceRepositoryService;
+import com.fs.remoterouterconfigurationassistant.databases.entities.NetworkDeviceDao;
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
@@ -24,6 +27,8 @@ public class RouterApiService {
     @Autowired
     RouterCommandInterpreter routerCommandInterpreter;
 
+    @Autowired
+    NetworkDeviceRepositoryService networkDeviceRepositoryService;
     public boolean connectToRouter(RouterAccessDetails accessDetails) {
         String username = accessDetails.getUsername();
         String password = accessDetails.getPassword();
@@ -83,5 +88,19 @@ public class RouterApiService {
         }
 
         return "FAILED TO DISCONNECT FROM ROUTER";
+    }
+
+    public void addNewNetworkDevice(NewDevice newDevice)
+    {
+        NetworkDeviceDao dao = NetworkDeviceDao.builder()
+                        .deviceName(newDevice.getDeviceName())
+                        .ipAddress(newDevice.getIpAddress())
+                        .username(newDevice.getUsername())
+                        .password(newDevice.getPassword())
+                        .enablePassword(newDevice.getEnablePassword())
+                        .build();
+
+        networkDeviceRepositoryService.addNetworkDeviceToDatabase(dao);
+
     }
 }

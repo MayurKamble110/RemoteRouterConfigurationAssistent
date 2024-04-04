@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fs.remoterouterconfigurationassistant.RouterAccessDetails;
 import com.fs.remoterouterconfigurationassistant.api.model.FlaskServerApiRequestBody;
+import com.fs.remoterouterconfigurationassistant.api.model.NewDevice;
 import com.fs.remoterouterconfigurationassistant.databases.ShowInterfaceRepositoryService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +53,14 @@ public class RouterApi {
     public String disconnectFromRouter() {
 
         return routerApiService.disconnectSSH();
+    }
+
+    @PostMapping(path = "/add-device")
+    public String addDevice(@RequestBody NewDevice newDevice)
+    {
+        routerApiService.addNewNetworkDevice(newDevice);
+
+        return "1";
     }
     @PostMapping("/test")
     public String test()

@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,11 +16,12 @@ import lombok.NoArgsConstructor;
 @Table(name = "network_devices")
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class NetworkDeviceDao {
     @Id
     @Column(name = "device_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long deviceId;
+    private Long deviceId;
 
     @Column(name = "device_name")
     private String deviceName;
@@ -36,19 +38,19 @@ public class NetworkDeviceDao {
     @Column(name = "enable_password")
     private String enablePassword;
 
-    @Column(name = "os_type")
+    @Column(name = "os_type",columnDefinition = "VARCHAR(255) DEFAULT 'N/A'")
     private String osType;
 
-    @Column(name = "os_version")
+    @Column(name = "os_version",columnDefinition = "VARCHAR(255) DEFAULT 'N/A'")
     private String osVersion;
 
-    @Column(name = "hardware_model")
+    @Column(name = "hardware_model",columnDefinition = "VARCHAR(255) DEFAULT 'N/A'")
     private String hardwareModel;
 
-    @Column(name = "raw_logs")
+    @Column(name = "raw_logs",columnDefinition = "VARCHAR(255) DEFAULT 'N/A'")
     private String rawLogs;
 
-    @Column(name = "device_type")
+    @Column(name = "device_type",columnDefinition = "VARCHAR(255) DEFAULT 'N/A'")
     private String deviceType;
 
 }
