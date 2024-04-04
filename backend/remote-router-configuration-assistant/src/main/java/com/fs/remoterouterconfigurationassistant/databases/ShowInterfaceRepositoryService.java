@@ -2,6 +2,8 @@ package com.fs.remoterouterconfigurationassistant.databases;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.fs.remoterouterconfigurationassistant.api.model.CommandRequest;
 import com.fs.remoterouterconfigurationassistant.api.model.FlaskServerApiRequestBody;
 import com.fs.remoterouterconfigurationassistant.api.model.RouterInterfaceResponceDto;
 import com.fs.remoterouterconfigurationassistant.api.routerCommands.ShowInterfaces;
@@ -14,7 +16,9 @@ public class ShowInterfaceRepositoryService {
     @Autowired
     private ShowInterfaceRepository repository;
 
-    public void addInterfacesToDatabase(String responce) {
+
+
+    public void addInterfacesToDatabase(String responce, CommandRequest commandRequest) {
 
         String[] interfaces = ShowInterfaces.parseData(responce);
 
@@ -33,7 +37,7 @@ public class ShowInterfaceRepositoryService {
                                 .raw_information(data)
                                 .build();
                 System.out.println("Inserting a row in database.....");
-                repository.save(dao);
+
 
             }
         }

@@ -47,11 +47,28 @@ public class NetworkDeviceDao {
     @Column(name = "hardware_model",columnDefinition = "VARCHAR(255) DEFAULT 'N/A'")
     private String hardwareModel;
 
-    @Column(name = "raw_logs",columnDefinition = "VARCHAR(255) DEFAULT 'N/A'")
+    @Column(name = "raw_logs",columnDefinition = "VARCHAR(5000) DEFAULT 'N/A'")
     private String rawLogs;
 
     @Column(name = "device_type",columnDefinition = "VARCHAR(255) DEFAULT 'N/A'")
     private String deviceType;
+
+    @Override
+    public String toString() {
+        return "Device {\n" +
+                        "deviceId=" + deviceId +
+                        ", \ndeviceName='" + deviceName + '\'' +
+                        ", \nipAddress='" + ipAddress + '\'' +
+                        ", \nusername='" + username + '\'' +
+                        ", \npassword='" + password + '\'' +
+                        ", \nenablePassword='" + enablePassword + '\'' +
+                        ", \nosType='" + osType + '\'' +
+                        ", \nosVersion='" + osVersion + '\'' +
+                        ", \nhardwareModel='" + hardwareModel + '\'' +
+                        ", \nrawLogs='" + rawLogs + '\'' +
+                        ", \ndeviceType='" + deviceType + '\'' +
+                        '}';
+    }
 
 }
 

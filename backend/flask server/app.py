@@ -38,14 +38,9 @@ chain = prompt | chat
 def hello_world():
     return 'hello'
 
-<<<<<<< HEAD
-@app.route("/getjson",methods=['POST'])
-def generate():
-=======
 
 @app.route('/chat-bot',methods=['POST'])
 def ask_chat_bot():
->>>>>>> a28e91c0c26fc59f123c7ce5f69bfe1370f3be67
     data = request.get_json()
     global chat_message_history  # access the global variable
     try:
@@ -68,7 +63,7 @@ def ask_ai():
         model = ChatGoogleGenerativeAI(model='gemini-pro',google_api_key=os.getenv('GOOGLE_KEY'),convert_system_message_to_human=True)
         response = model.invoke(data['text'])
         cleaned_response = remove_special_characters(response.content)
-        return jsonify({'response': cleaned_response}), 200
+        return cleaned_response
     except Exception as e:
         print(f"An error occurred: {str(e)}")
         return jsonify({'error': 'An error occurred'}), 500

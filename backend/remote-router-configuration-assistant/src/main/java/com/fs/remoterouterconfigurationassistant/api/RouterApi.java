@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fs.remoterouterconfigurationassistant.RouterAccessDetails;
+import com.fs.remoterouterconfigurationassistant.api.model.CommandRequest;
 import com.fs.remoterouterconfigurationassistant.api.model.FlaskServerApiRequestBody;
 import com.fs.remoterouterconfigurationassistant.api.model.NewDevice;
 import com.fs.remoterouterconfigurationassistant.databases.ShowInterfaceRepositoryService;
@@ -39,9 +40,9 @@ public class RouterApi {
     }
 
     @PostMapping(path = "/commands")
-    public String executeCommandOnRouter(@RequestBody String command) {
+    public String executeCommandOnRouter(@RequestBody CommandRequest commandRequest) {
 
-        String response = routerApiService.executeCommandOnRouter(command);
+        String response = routerApiService.executeCommandOnRouter(commandRequest);
 
         System.out.println(response);
 
@@ -62,11 +63,11 @@ public class RouterApi {
 
         return "1";
     }
-    @PostMapping("/test")
-    public String test()
-    {
-        service.addInterfacesToDatabase("");
-        return "Hi";
-    }
+//    @PostMapping("/test")
+//    public String test()
+//    {
+//        service.addInterfacesToDatabase("",);
+//        return "Hi";
+//    }
 
 }

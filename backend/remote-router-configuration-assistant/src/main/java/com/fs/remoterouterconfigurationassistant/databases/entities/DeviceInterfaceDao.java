@@ -10,6 +10,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,6 +19,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "device_interface")
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class DeviceInterfaceDao {
 
     @Id
@@ -38,7 +40,7 @@ public class DeviceInterfaceDao {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "raw_logs")
+    @Column(name = "raw_logs",length = 5000)
     private String rawLogs;
 
 }

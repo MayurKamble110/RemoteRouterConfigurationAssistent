@@ -18,12 +18,12 @@ public class RouterInterfaceResponceDto {
 
     @Override
     public String toString() {
-        return "RouterInterfaceResponseDto{" +
-                        "name='" + name + '\'' +
-                        ", status='" + status + '\'' +
-                        ", ip_address='" + ip_address + '\'' +
-                        ", description='" + description + '\'' +
-                        ", hardware='" + hardware + '\'' +
+        return "RouterInterfaceResponseDto\n{" +
+                        "\nname='" + name + '\'' +
+                        ", \nstatus='" + status + '\'' +
+                        ", \nip_address='" + ip_address + '\'' +
+                        ", \ndescription='" + description + '\'' +
+                        ", \nhardware='" + hardware + '\'' +
                         '}';
     }
 
