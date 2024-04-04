@@ -3,12 +3,13 @@ import './Dialog.css';
 import DEVICES from "../Data/device";
 import { useState } from "react";
 
-function Dialog(props,ref){
+function Dialog(props){
 
     const modal = useRef();
     const [formData, setFormData] = useState({
         username: '',
         ipAddress: '',
+        deviceName: '',
         loginPassword: '',
         enablePassword: ''
     });
@@ -25,6 +26,7 @@ function Dialog(props,ref){
     function handleCloseModal()
     {   
         props.onClose();
+        console.log(formData)
     }
 
     const handleChange = (event) => {
@@ -47,6 +49,10 @@ function Dialog(props,ref){
                 <div>
                     <label>IP Address</label>
                     <input type="text" name="ipAddress" value={formData.ipAddress} onChange={handleChange}></input>
+                </div>
+                <div>
+                    <label>Device Name</label>
+                    <input type="text" name="deviceName" value={formData.deviceName} onChange={handleChange}></input>
                 </div>
                 <div>
                     <label>Login Password</label>
