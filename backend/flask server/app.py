@@ -1,69 +1,99 @@
 import os
-import dotenv
 from langchain.memory import ChatMessageHistory
 from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from flask import Flask , request , jsonify
+from flask import Flask, request, jsonify
 from text_formatter import remove_special_characters
+from connect import save_message, get_raw_interface_logs,get_raw_router_logs
+from lang import chat_with_chain, load_message_history
+import lang
 
 app = Flask(__name__)
 
-dotenv.load_dotenv()
 
-def chatWithChain(message, chat_message_history):
-    chat_message_history.add_user_message(message)
-    response = chain.invoke({"messages": chat_message_history.messages})
-    chat_message_history.add_ai_message(response)
-    return response.content
-
-chat = ChatGoogleGenerativeAI(model='gemini-pro', convert_system_message_to_human=True,
-                              temperature=0.5, google_api_key=os.getenv('GOOGLE_KEY'))
-
-prompt = ChatPromptTemplate.from_messages(
-    [
-        (
-            "system",
-            "You are a network administrator chatbot. Answer all questions in two or three lines",
-        ),
-        MessagesPlaceholder(variable_name="messages"),
-    ]
-)
-
-chat_message_history = ChatMessageHistory()
-chain = prompt | chat
-
-
-@app.route('/',methods=['GET'])
+@app.route('/', methods=['GET'])
 def hello_world():
     return 'hello'
 
 
-@app.route('/chat-bot',methods=['POST'])
+@app.route('/chat-bot', methods=['POST'])
 def ask_chat_bot():
     data = request.get_json()
-    global chat_message_history  # access the global variable
+    text = data['text']
+    username = data['username']
     try:
-        response = chatWithChain(data['text'], chat_message_history=chat_message_history)
+        message_history = ChatMessageHistory()
+        message_history = load_message_history(data['username'],
+                                               message_history=message_history,
+                                               message=data['text'])
+        print(message_history)
+        response = chat_with_chain(text, message_history=message_history)
         cleaned_response = remove_special_characters(response)
-        return jsonify({'response': cleaned_response}), 200
+        save_message(username=username, human_message=text, ai_message=cleaned_response)
+        return cleaned_response
     except KeyError:
-        return jsonify({'error': 'Invalid request data: "text" field not found'}), 400
+        return "Key not found"
     except Exception as e:
         print(f"An error occurred: {str(e)}")
         # Reset the chat_message_history object
-        chat_message_history = ChatMessageHistory()
-        return jsonify({'error': 'An error occurred'}), 500
+        lang.chat_message_history = ChatMessageHistory()
+        return "an error occurred"
 
 
 @app.route('/ask-ai', methods=['POST'])
 def ask_ai():
     data = request.get_json()
+    text = data['text']
     try:
-        model = ChatGoogleGenerativeAI(model='gemini-pro',google_api_key=os.getenv('GOOGLE_KEY'),convert_system_message_to_human=True)
-        response = model.invoke(data['text'])
+        model = ChatGoogleGenerativeAI(model='gemini-pro', google_api_key=os.getenv('GOOGLE_KEY'),
+                                       convert_system_message_to_human=True)
+        response = model.invoke(text)
         cleaned_response = remove_special_characters(response.content)
         return cleaned_response
     except Exception as e:
         print(f"An error occurred: {str(e)}")
-        return jsonify({'error': 'An error occurred'}), 500
+        return "An error occurred"
+
+
+@app.route('/analyse-interface', methods=['POST'])
+def analyse_interface():
+    data = request.get_json()
+    interface_id = data['interface_id']
+    try:
+        interface_logs = get_raw_interface_logs(interface_id)
+        model = ChatGoogleGenerativeAI(model='gemini-pro', google_api_key=os.getenv('GOOGLE_KEY'),
+                                       convert_system_message_to_human=True)
+        prompt = ("You are a helpful network administration advisor. "
+                  "I am providing you some logs of router's interface configuration. "
+                  "You have to analyse them and provide a short summary about the state of the interface"
+                  ", vulnerabilities the router may "
+                  "be exposed to and recommendations to mitigate the risks."
+                  "All these 3 fields to be in a new paragraph. "
+                  "The response must be under 100 words. "
+                  "Here are the logs ")
+        response = model.invoke(prompt + interface_logs)
+        return response.content
+    except Exception as e:
+        print("An error occurred : ", type(e))
+        return "An error occurred"
+
+
+@app.route('/analyse-router', methods=['POST'])
+def analyse_router():
+    data = request.get_json()
+    router_id = data['device_id']
+    try:
+        router_logs = get_raw_router_logs(router_id)
+        model = ChatGoogleGenerativeAI(model='gemini-pro', google_api_key=os.getenv('GOOGLE_KEY'),
+                                       convert_system_message_to_human=True)
+        prompt = ("You are a helpful network administration advisor. "
+                  "I am providing you some logs of router configuration. "
+                  "You have to analyse them and provide a short summary about the state of the router, "
+                  "vulnerabilities the router may be exposed to and recommendations to mitigate the "
+                  "risks.All these 3 fields to be in a new paragraph. "
+                  "The response must be under 100 words. Here are the logs ")
+        response = model.invoke(prompt + router_logs)
+        return response.content
+    except Exception as e:
+        print("an error occurred", type(e))
+        return "An error occurred"
+
