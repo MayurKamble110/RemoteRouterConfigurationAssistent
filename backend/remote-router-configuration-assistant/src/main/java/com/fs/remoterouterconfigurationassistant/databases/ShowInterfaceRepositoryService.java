@@ -25,7 +25,7 @@ public class ShowInterfaceRepositoryService {
         for (String data : interfaces) {
             if (data.contains("GigabitEthernet")) {
                 RouterInterfaceResponceDto responceDto =
-                                FlaskServer.makeRequest(new FlaskServerApiRequestBody(data,
+                                FlaskServer.getRouterInterfaceResponceDto(new FlaskServerApiRequestBody(data,
                                                 "Give a JSON  object including name,status,ip_address,description and hardware. all these fields should be of string type."));
                 System.out.println("Length : " + data.length());
                 ShowInterfacesDao dao = ShowInterfacesDao.builder()

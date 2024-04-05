@@ -7,17 +7,17 @@ import com.fs.remoterouterconfigurationassistant.api.model.FlaskServerApiRequest
 import com.fs.remoterouterconfigurationassistant.api.model.RouterVersionResponseDto;
 import com.fs.remoterouterconfigurationassistant.databases.entities.NetworkDeviceDao;
 import com.fs.remoterouterconfigurationassistant.flaskserver.FlaskServer;
-import com.fs.remoterouterconfigurationassistant.flaskserver.FlaskServerVersion;
+
 @Service
 public class ShowVersionRepositoryService {
     @Autowired
     private NetworkDeviceRepository networkDeviceRepository;
 
 
-    public void addVersionToDatabase(String response, Long deviceId)
+    public void addVersionDataToDatabase(String response, Long deviceId)
     {
         RouterVersionResponseDto routerVersionResponseDto=
-        FlaskServerVersion.makeRequest(new FlaskServerApiRequestBody(response,
+        FlaskServer.getRouterVersionResponseDto(new FlaskServerApiRequestBody(response,
                 "Give a JSON  object including os_type and os_version. all these fields should be of string type."));
         NetworkDeviceDao deviceDao = networkDeviceRepository.getReferenceById(deviceId);
         NetworkDeviceDao deviceDao1 = NetworkDeviceDao.builder()
