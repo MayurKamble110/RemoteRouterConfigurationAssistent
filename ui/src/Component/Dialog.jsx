@@ -10,10 +10,10 @@ function Dialog(props){
         username: '',
         ipAddress: '',
         deviceName: '',
-        loginPassword: '',
+        password: '',
         enablePassword: ''
     });
-    
+
     useEffect(()=>{
         if(props.open){
             modal.current.showModal();
@@ -23,12 +23,30 @@ function Dialog(props){
         }
     },[props.open])
 
-    function handleCloseModal()
-    {   
-        props.onClose();
-        console.log(formData)
+    
+    async function handleCloseModal(event) {
+        try {
+            event.preventDefault();
+            const response = await fetch('http://localhost:8080/add-device', {
+                method: 'POST', 
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData), 
+            });
+    
+            if (!response.ok) {
+                throw new Error('Failed to add device');
+            }
+    
+            const data = await response.json();
+            console.log(data);
+            props.onClose();
+        } catch (error) {
+            console.error('Error adding device:', error);
+        }
     }
-
+    
     const handleChange = (event) => {
         const { name, value } = event.target;
         setFormData((prevFormData) => ({
@@ -56,7 +74,7 @@ function Dialog(props){
                 </div>
                 <div>
                     <label>Login Password</label>
-                    <input type="password" name="loginPassword" value={formData.loginPassword} onChange={handleChange}></input>
+                    <input type="password" name="password" value={formData.password} onChange={handleChange}></input>
                 </div>
                 <div>
                     <label>Enable Password</label>
