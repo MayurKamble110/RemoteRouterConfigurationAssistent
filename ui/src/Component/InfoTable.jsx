@@ -14,6 +14,7 @@ function NoDataView() {
       </div>
     );
   }
+
 export default function DeviceGrid() {
   const data = React.useMemo(() => {
     const columns = VISIBLE_FIELDS.map(field => ({
