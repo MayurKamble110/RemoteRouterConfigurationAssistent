@@ -13,7 +13,7 @@ function Dialog(props){
         password: '',
         enablePassword: ''
     });
-    
+
     useEffect(()=>{
         if(props.open){
             modal.current.showModal();
