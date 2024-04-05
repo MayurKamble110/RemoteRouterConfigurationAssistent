@@ -20,30 +20,19 @@ public class DeviceInterfaceRepositoryService {
     @Autowired
     NetworkDeviceRepository networkDeviceRepository;
 
-    public void saveDeviceInterfaceDateToDatabase(String responce, Long deviceid) {
+    public void saveDeviceInterfaceDataToDatabase(String responce, Long deviceid) {
 
         String[] interfaces = ShowInterfaces.parseData(responce);
 
         for (String data : interfaces) {
             if (data.contains("GigabitEthernet")) {
                 RouterInterfaceResponceDto responceDto =
-                                FlaskServer.makeRequest(new FlaskServerApiRequestBody(data,
+                                FlaskServer.getRouterInterfaceResponceDto(new FlaskServerApiRequestBody(
+                                                data,
                                                 "Only give name,status,ip_address,description and hardware in JSON format it should be a single JSON object containing only given four fields. all these fields should be of string type."));
-                System.out.println("Length : " + data.length());
-                System.out.println("Responce DTO : \n"+responceDto);
-//              ShowInterfacesDao dao = ShowInterfacesDao.builder()
-//                                .status(responceDto.getStatus())
-//                                .name(responceDto.getName())
-//                                .description(responceDto.getDescription())
-//                                .hardware(responceDto.getHardware())
-//                                .ip_address(responceDto.getIp_address())
-//                                .raw_information(data)
-//                                .build();
-//                System.out.println("Inserting a row in database.....");
-                System.out.println("Got resopnce from flask server....");
+                System.out.println("Inserting a row in database.....");
                 NetworkDeviceDao networkDeviceDao =
                                 networkDeviceRepository.getReferenceById(deviceid);
-                System.out.println(networkDeviceDao);
                 assert responceDto != null;
                 boolean status = responceDto.getStatus().equals("up");
                 DeviceInterfaceDao dao = DeviceInterfaceDao.builder()
@@ -53,7 +42,6 @@ public class DeviceInterfaceRepositoryService {
                                 .description(responceDto.getDescription())
                                 .rawLogs(data)
                                 .build();
-
                 deviceInterfaceRepository.save(dao);
             }
         }
