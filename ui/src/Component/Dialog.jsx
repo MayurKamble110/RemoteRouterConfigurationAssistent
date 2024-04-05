@@ -23,12 +23,28 @@ function Dialog(props){
         }
     },[props.open])
 
-    function handleCloseModal(event)
-    {    
+    const handleCloseModal = async (event) => {
         event.preventDefault();
-        props.onClose();
-        console.log(formData)
-    }
+        try {
+            const response = await fetch('http://localhost:8080/api/add-device', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to add device');
+            }
+
+            const data = await response.json();
+            console.log(data);
+            props.onClose();
+        } catch (error) {
+            console.error('Error adding device:', error);
+        }
+    };
 
     const handleChange = (event) => {
         const { name, value } = event.target;

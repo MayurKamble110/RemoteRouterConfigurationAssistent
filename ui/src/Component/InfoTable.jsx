@@ -2,7 +2,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import DEVICES from '../Data/device';
-import './InfoTable.css'
+import './InfoTable.css';
 
 const VISIBLE_FIELDS = ['id', 'name', 'ip_address', 'status', 'hardware', 'os', 'os_version'];
 
