@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.fs.remoterouterconfigurationassistant.api.model.CommandRequest;
 import com.fs.remoterouterconfigurationassistant.databases.DeviceInterfaceRepositoryService;
 import com.fs.remoterouterconfigurationassistant.databases.ShowInterfaceRepositoryService;
+import com.fs.remoterouterconfigurationassistant.databases.ShowVersionRepositoryService;
 
 @Service
 public class RouterCommandInterpreter {
@@ -16,6 +17,9 @@ public class RouterCommandInterpreter {
     @Autowired
     DeviceInterfaceRepositoryService deviceInterfaceRepositoryService;
 
+    @Autowired
+    ShowVersionRepositoryService showVersionRepositoryService;
+
     public void processor(StringBuilder response, CommandRequest commandRequest)
     {
         switch (commandRequest.getCommand())
@@ -24,7 +28,9 @@ public class RouterCommandInterpreter {
                deviceInterfaceRepositoryService.saveDeviceInterfaceDateToDatabase(response.toString(),commandRequest.getDeviceId());
                break;
             case "show version":
-                System.out.println("Yet to write logic");
+                showVersionRepositoryService.addVersionToDatabase(response.toString(), commandRequest.getDeviceId());
+//                System.out.println("Yet to write logic");
+
                 break;
             case "show ip route" :
                 System.out.println("Yet to write logic");
