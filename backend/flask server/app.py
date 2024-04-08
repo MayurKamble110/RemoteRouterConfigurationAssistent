@@ -61,7 +61,7 @@ def analyse_interface():
     try:
         interface_logs = get_raw_interface_logs(interface_id)
         model = ChatGoogleGenerativeAI(model='gemini-pro', google_api_key=os.getenv('GOOGLE_KEY'),
-                                       convert_system_message_to_human=True)
+                                       convert_system_message_to_human=True,temperature=0.1)
         prompt = ("You are a helpful network administration advisor. "
                   "I am providing you some logs of router's interface configuration. "
                   "You have to analyse them and provide a short summary about the state of the interface"
@@ -74,7 +74,7 @@ def analyse_interface():
         return response.content
     except Exception as e:
         print("An error occurred : ", type(e))
-        return "An error occurred"
+        return "null"
 
 
 @app.route('/analyse-router', methods=['POST'])
@@ -84,7 +84,7 @@ def analyse_router():
     try:
         router_logs = get_raw_router_logs(router_id)
         model = ChatGoogleGenerativeAI(model='gemini-pro', google_api_key=os.getenv('GOOGLE_KEY'),
-                                       convert_system_message_to_human=True)
+                                       convert_system_message_to_human=True,temperature=0.1)
         prompt = ("You are a helpful network administration advisor. "
                   "I am providing you some logs of router configuration. "
                   "You have to analyse them and provide a short summary about the state of the router, "
@@ -95,5 +95,5 @@ def analyse_router():
         return response.content
     except Exception as e:
         print("an error occurred", type(e))
-        return "An error occurred"
+        return "null"
 
