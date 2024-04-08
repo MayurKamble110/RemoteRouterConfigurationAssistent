@@ -4,6 +4,10 @@ const initialDeviceState = {
     deviceClicked : 0
 }
 
+const initialAddDeviceState = {
+    isOpenModal : false ,
+}
+
 const deviceSlice = createSlice(
     {
         name : 'device',
@@ -16,12 +20,29 @@ const deviceSlice = createSlice(
     }
 )
 
+const addDeviceSLice = createSlice(
+    {
+        name : 'addDevice',
+        initialState : initialAddDeviceState,
+        reducers : {
+            setOpenModal : function(state){
+                state.isOpenModal = true;
+            },
+            setCloseModal : function(state){
+                state.isOpenModal = false;
+            }
+        }
+    }
+)
+
 const store = configureStore({
     reducer : {
-        device : deviceSlice.reducer
+        device : deviceSlice.reducer,
+        addDevice : addDeviceSLice.reducer
     }
 });
 
 export default store ;
 
 export const deviceActions = deviceSlice.actions ;
+export const addDeviceActions = addDeviceSLice.actions ;
