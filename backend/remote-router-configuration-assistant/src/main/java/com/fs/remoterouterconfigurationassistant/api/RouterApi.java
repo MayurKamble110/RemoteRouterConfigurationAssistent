@@ -23,7 +23,7 @@ import org.springframework.web.client.RestTemplate;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/routers/")
+@RequestMapping("/api/routers")
 public class RouterApi {
 
     @Autowired
@@ -74,7 +74,7 @@ public class RouterApi {
 
     }
 
-    @GetMapping(path = "/analyse/{deviceId}")
+    @GetMapping(path = "/{deviceId}/analyse")
     public ResponseEntity<?> analyseRouter(@PathVariable String deviceId){
         try{
             return ResponseEntity.ok(routerApiService.analyseRouter(deviceId));

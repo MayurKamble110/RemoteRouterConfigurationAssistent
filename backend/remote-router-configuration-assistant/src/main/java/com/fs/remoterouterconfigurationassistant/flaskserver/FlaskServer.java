@@ -121,4 +121,32 @@ public class FlaskServer {
             throw new ResourceAccessException("Server is not responding");
         }
     }
+
+    public static String analyseInterface(String interfaceId) throws ResourceAccessException, BadRequestException {
+        String ANALYSE_ROUTER_ENDPOINT = "http://localhost:5000/analyse-interface";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        String requestBody = "{\"interface_id\": \"" + interfaceId + "\"}";
+
+        HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, headers);
+
+        RestTemplate restTemplate = new RestTemplate();
+        try {
+            ResponseEntity<String> responseEntity = restTemplate.postForEntity(
+                    ANALYSE_ROUTER_ENDPOINT,
+                    requestEntity,
+                    String.class);
+            if (responseEntity.getStatusCode().is2xxSuccessful()) {
+                if(responseEntity.getBody().equals("null"))
+                    throw new BadRequestException("Interface not found");
+                return responseEntity.getBody();
+            } else {
+                System.out.println("Failed to get a successful response from the server.");
+                return "NULL";
+            }
+        } catch (ResourceAccessException e) {
+            throw new ResourceAccessException("Server is not responding");
+        }
+    }
 }
