@@ -7,18 +7,23 @@ import com.fs.remoterouterconfigurationassistant.api.routerCommands.RouterComman
 import com.fs.remoterouterconfigurationassistant.databases.NetworkDeviceRepository;
 import com.fs.remoterouterconfigurationassistant.databases.NetworkDeviceRepositoryService;
 import com.fs.remoterouterconfigurationassistant.databases.entities.NetworkDeviceDao;
+import com.fs.remoterouterconfigurationassistant.flaskserver.FlaskServer;
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 
+import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.client.ResourceAccessException;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.rmi.ServerError;
+import java.rmi.ServerException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -134,5 +139,9 @@ public class RouterApiService {
     public List<NetworkDeviceDao> getAllNetworkDevices()
     {
         return networkDeviceRepository.findAll();
+    }
+
+    public String analyseRouter(String deviceId) throws ResourceAccessException, BadRequestException {
+        return FlaskServer.analyseRouter(deviceId);
     }
 }

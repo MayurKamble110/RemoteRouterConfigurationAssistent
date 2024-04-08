@@ -1,12 +1,13 @@
 package com.fs.remoterouterconfigurationassistant.api;
 
+import java.io.Serial;
+import java.rmi.ServerException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.apache.coyote.BadRequestException;
+import org.springframework.http.*;
+import org.springframework.web.bind.annotation.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fs.remoterouterconfigurationassistant.RouterAccessDetails;
@@ -17,16 +18,12 @@ import com.fs.remoterouterconfigurationassistant.databases.ShowInterfaceReposito
 import com.fs.remoterouterconfigurationassistant.databases.entities.NetworkDeviceDao;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/routers/")
 public class RouterApi {
 
     @Autowired
@@ -59,7 +56,7 @@ public class RouterApi {
         return routerApiService.disconnectSSH();
     }
 
-    @PostMapping(path = "/add-device")
+    @PostMapping(path = "")
     public String addDevice(@RequestBody NewDevice newDevice)
     {
         routerApiService.addNewNetworkDevice(newDevice);
@@ -67,7 +64,7 @@ public class RouterApi {
         return "1";
     }
 
-    @GetMapping(path = "/get-router-data")
+    @GetMapping(path = "")
     public List<NetworkDeviceDao>  getAllRouterData()
     {
         List<NetworkDeviceDao>  networkDeviceDaoList = routerApiService.getAllNetworkDevices();
@@ -77,6 +74,16 @@ public class RouterApi {
 
     }
 
+    @GetMapping(path = "/analyse/{deviceId}")
+    public ResponseEntity<?> analyseRouter(@PathVariable String deviceId){
+        try{
+            return ResponseEntity.ok(routerApiService.analyseRouter(deviceId));
+        }catch (ResourceAccessException e){
+            return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
+        }catch (BadRequestException e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 //    @PostMapping("/test")
 //    public String test()
 //    {
