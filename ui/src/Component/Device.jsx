@@ -1,19 +1,23 @@
 import { useState } from "react";
 import './Device.css';
 import Dialog from "./Dialog";
+import store from "../Store";
+import { addDeviceActions } from "../Store";
+import { useSelector , useDispatch } from "react-redux";
 
 export default function Device()
 {
-    const[isModalOpen , setIsModalOpen] = useState(false);
+    const isModalOpen = useSelector((state) => state.addDevice.isOpenModal)
+    const dispatch = useDispatch();
     
     function handleAddDevice()
     {
-        setIsModalOpen(true);
+        dispatch(addDeviceActions.setOpenModal());
     }
 
     function handleCloseModal()
     {
-        setIsModalOpen(false);
+        dispatch(addDeviceActions.setCloseModal());
     }
     
     return (
