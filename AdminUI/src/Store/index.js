@@ -1,12 +1,10 @@
 import { configureStore , createSlice } from '@reduxjs/toolkit';
 
 const initialDeviceState = {
-    deviceClicked : 0
+    deviceId : 0 ,
+    deviceName : ''
 }
 
-const initialAddDeviceState = {
-    isOpenModal : false ,
-}
 
 const deviceSlice = createSlice(
     {
@@ -14,35 +12,20 @@ const deviceSlice = createSlice(
         initialState : initialDeviceState ,
         reducers : {
             clickedDevice(state , action){
-                state.deviceClicked = action.payload.id;
+                state.deviceId = action.payload.id;
+                state.deviceName = action.payload.name;
             }
         }
     }
 )
 
-const addDeviceSLice = createSlice(
-    {
-        name : 'addDevice',
-        initialState : initialAddDeviceState,
-        reducers : {
-            setOpenModal : function(state){
-                state.isOpenModal = true;
-            },
-            setCloseModal : function(state){
-                state.isOpenModal = false;
-            }
-        }
-    }
-)
 
 const store = configureStore({
     reducer : {
         device : deviceSlice.reducer,
-        addDevice : addDeviceSLice.reducer
     }
 });
 
 export default store ;
 
 export const deviceActions = deviceSlice.actions ;
-export const addDeviceActions = addDeviceSLice.actions ;
