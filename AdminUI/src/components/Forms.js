@@ -17,23 +17,23 @@ export default function Forms(){
               <div className="card-body">
                 <div className="form-group">
                   <label>Device Name</label>
-                  <input type="text" className="form-control" id="exampleInputEmail1" placeholder="Enter device name" />
+                  <input type="text" className="form-control" placeholder="Enter device name" />
                 </div>
                 <div className="form-group">
                   <label>IP Address</label>
-                  <input type="text" className="form-control" id="exampleInputEmail1" placeholder="Enter IP Address" />
+                  <input type="text" className="form-control" placeholder="Enter IP Address" />
                 </div>
                 <div className="form-group">
                   <label>Username</label>
-                  <input type="text" className="form-control" id="exampleInputEmail1" placeholder="Enter username" />
+                  <input type="text" className="form-control"  placeholder="Enter username" />
                 </div>
                 <div className="form-group">
                   <label htmlFor="exampleInputPassword1">Login Password</label>
-                  <input type="password" className="form-control" id="exampleInputPassword1" placeholder="Login Password" />
+                  <input type="password" className="form-control" placeholder="Login Password" />
                 </div>
                 <div className="form-group">
                   <label htmlFor="exampleInputPassword1">Enable Password</label>
-                  <input type="password" className="form-control" id="exampleInputPassword1" placeholder="Enable Password" />
+                  <input type="password" className="form-control" placeholder="Enable Password" />
                 </div>
               </div>
               {/* /.card-body */}
