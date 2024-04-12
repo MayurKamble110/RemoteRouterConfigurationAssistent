@@ -7,6 +7,7 @@
   import Forms from "./components/Forms";
   import Charts from './components/Charts';
   import DeviceData from './components/DeviceData';
+import CommandsInfo from './components/CommandsInfo';
 
   function App() {
     return (
@@ -16,8 +17,8 @@
         <SideNav/>
         <Routes>
             <Route path="/" Component={Content} />
-            <Route path="/charts" Component={Charts} />
             <Route path='/device' Component={DeviceData}/>
+            <Route path='/commands' Component={CommandsInfo}/>
         </Routes>
         <Footer/>
       </div>

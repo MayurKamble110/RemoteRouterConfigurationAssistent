@@ -43,12 +43,11 @@ export default function SideNav() {
                 </p>
               </Link>
             </li>
-
             <li className="nav-item">
-              <Link to="/charts" className="nav-link">
-                <i className="nav-icon fas fa-chart-pie" />
+            <Link to="/commands" className="nav-link">
+                <i className="nav-icon fas fa-edit" />
                 <p>
-                  Charts
+                  Commands
                 </p>
               </Link>
             </li>
