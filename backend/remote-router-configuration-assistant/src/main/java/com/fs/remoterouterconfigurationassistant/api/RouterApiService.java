@@ -64,7 +64,7 @@ public class RouterApiService {
         return true;
     }
 
-    public String executeCommandOnRouter(CommandRequest commandRequest) throws ResourceAccessException,JsonProcessingException{
+    public String executeCommandOnRouter(CommandRequest commandRequest) throws ResourceAccessException,JsonProcessingException,BadRequestException{
         StringBuilder output = new StringBuilder();
         try {
             if (session != null && session.isConnected()) {
@@ -135,7 +135,8 @@ public class RouterApiService {
         if(networkDeviceDao.isPresent())
         {
             String cpuProcessHistory = networkDeviceDao.get().getParsedCpuProcessesHistory();
-
+            if(cpuProcessHistory == null)
+                throw new ResourceAccessException("CPU history content is null.");
             ObjectMapper objectMapper = new ObjectMapper();
             Map<String, CpuProcessHistoryDto> cpuDataMap = objectMapper.readValue(cpuProcessHistory, Map.class);
             System.out.println(cpuDataMap);

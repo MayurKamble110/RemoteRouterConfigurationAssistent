@@ -39,8 +39,9 @@ public class NetworkDeviceRepositoryService {
             networkDeviceDao.get().setParsedCpuProcessesHistory(parsedResponse);
 
             networkDeviceRepository.save(networkDeviceDao.get());
+        }else {
+            throw new BadRequestException("Requested resource is not found.");
         }
-        throw new BadRequestException("Requested resource is not found.");
     }
 
 }

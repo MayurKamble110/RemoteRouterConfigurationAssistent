@@ -47,6 +47,8 @@ public class RouterApi {
         try {
             String response = routerApiService.executeCommandOnRouter(commandRequest);
             return ResponseEntity.ok(response);
+        }catch (BadRequestException e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         } catch (JsonProcessingException e){
             return new ResponseEntity<>(e.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY);
         }catch (ResourceAccessException e){
@@ -96,6 +98,8 @@ public class RouterApi {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY);
         }catch (BadRequestException e){
             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        } catch (ResourceAccessException e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.NO_CONTENT);
         }
     }
 
