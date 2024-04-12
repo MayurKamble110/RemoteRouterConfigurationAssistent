@@ -12,12 +12,9 @@ import com.fs.remoterouterconfigurationassistant.api.model.FlaskServerApiRequest
 import com.fs.remoterouterconfigurationassistant.api.model.RouterInterfaceResponceDto;
 import com.fs.remoterouterconfigurationassistant.api.model.RouterVersionResponseDto;
 
-import java.rmi.ServerException;
-
 public class FlaskServer {
 
     public static final String flaskServerApiEndpoint = "http://localhost:5000/ask-ai";
-
 
     public static RouterInterfaceResponceDto getRouterInterfaceResponceDto(FlaskServerApiRequestBody body) {
         body.setText(body.getText()+" Only give name,status,ip_address,description and hardware in JSON format it should be a single JSON object containing only given four fields. all these fields should be of string type.");
@@ -94,7 +91,7 @@ public class FlaskServer {
         return null;
     }
 
-    public static String analyseRouter(String deviceId) throws ResourceAccessException, BadRequestException {
+    public static String analyseRouter(Long deviceId) throws ResourceAccessException, BadRequestException {
         String ANALYSE_ROUTER_ENDPOINT = "http://localhost:5000/analyse-router";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -122,7 +119,7 @@ public class FlaskServer {
         }
     }
 
-    public static String analyseInterface(String interfaceId) throws ResourceAccessException, BadRequestException {
+    public static String analyseInterface(Long interfaceId) throws ResourceAccessException, BadRequestException {
         String ANALYSE_ROUTER_ENDPOINT = "http://localhost:5000/analyse-interface";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -148,5 +145,40 @@ public class FlaskServer {
         } catch (ResourceAccessException e) {
             throw new ResourceAccessException("Server is not responding");
         }
+    }
+
+    public static String getParsedCpuProcessHistoryData(FlaskServerApiRequestBody body)
+    {
+        body.setText(body.getText()+body.getPrompt());
+        ObjectMapper objectMapper = new ObjectMapper();
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        try {
+            String jsonBody = objectMapper.writeValueAsString(body);
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<String> requestEntity = new HttpEntity<>(jsonBody, headers);
+
+            ResponseEntity<String> responseEntity = restTemplate.postForEntity(
+                            flaskServerApiEndpoint,
+                            requestEntity,
+                            String.class);
+
+            if (responseEntity.getStatusCode().is2xxSuccessful()) {
+                String responseBody = responseEntity.getBody()
+                                .replaceAll("```", "")
+                                .replaceAll("JSON", "")
+                                .replaceAll("json", "");
+                System.out.println(responseBody);
+                return responseBody;
+
+            } else {
+                System.err.println("Failed to get a successful response from the server.");
+            }
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return "0";
     }
 }

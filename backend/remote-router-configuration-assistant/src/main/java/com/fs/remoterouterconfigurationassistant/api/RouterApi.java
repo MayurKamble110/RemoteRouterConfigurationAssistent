@@ -4,14 +4,17 @@ import java.io.Serial;
 import java.rmi.ServerException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fs.remoterouterconfigurationassistant.RouterAccessDetails;
 import com.fs.remoterouterconfigurationassistant.api.model.CommandRequest;
+import com.fs.remoterouterconfigurationassistant.api.model.CpuProcessHistoryDto;
 import com.fs.remoterouterconfigurationassistant.api.model.FlaskServerApiRequestBody;
 import com.fs.remoterouterconfigurationassistant.api.model.NewDevice;
 import com.fs.remoterouterconfigurationassistant.databases.ShowInterfaceRepositoryService;
@@ -44,7 +47,6 @@ public class RouterApi {
 
         String response = routerApiService.executeCommandOnRouter(commandRequest);
 
-        System.out.println(response);
 
         return response;
     }
@@ -57,17 +59,15 @@ public class RouterApi {
     }
 
     @PostMapping(path = "")
-    public String addDevice(@RequestBody NewDevice newDevice)
-    {
+    public String addDevice(@RequestBody NewDevice newDevice) {
         routerApiService.addNewNetworkDevice(newDevice);
 
         return "1";
     }
 
     @GetMapping(path = "")
-    public List<NetworkDeviceDao>  getAllRouterData()
-    {
-        List<NetworkDeviceDao>  networkDeviceDaoList = routerApiService.getAllNetworkDevices();
+    public List<NetworkDeviceDao> getAllRouterData() {
+        List<NetworkDeviceDao> networkDeviceDaoList = routerApiService.getAllNetworkDevices();
         System.out.println(networkDeviceDaoList);
 
         return networkDeviceDaoList;
@@ -75,15 +75,22 @@ public class RouterApi {
     }
 
     @GetMapping(path = "/{deviceId}/analyse")
-    public ResponseEntity<?> analyseRouter(@PathVariable String deviceId){
-        try{
+    public ResponseEntity<?> analyseRouter(@PathVariable Long deviceId) {
+        try {
             return ResponseEntity.ok(routerApiService.analyseRouter(deviceId));
-        }catch (ResourceAccessException e){
+        } catch (ResourceAccessException e) {
             return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
-        }catch (BadRequestException e){
+        } catch (BadRequestException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping(path = "/{deviceId}/cpu-process-history")
+    public Map<String, CpuProcessHistoryDto> getCpuProcessHistoryData(@PathVariable Long deviceId)
+                    throws JsonProcessingException {
+           return routerApiService.getCpuProcessHistory(deviceId);
+    }
+
 //    @PostMapping("/test")
 //    public String test()
 //    {

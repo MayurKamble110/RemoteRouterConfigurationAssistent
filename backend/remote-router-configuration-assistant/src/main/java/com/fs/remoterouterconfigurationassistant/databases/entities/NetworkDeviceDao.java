@@ -53,6 +53,12 @@ public class NetworkDeviceDao {
     @Column(name = "device_type",columnDefinition = "VARCHAR(255) DEFAULT 'N/A'")
     private String deviceType;
 
+    @Column(name = "raw_cpu_processes_history",columnDefinition = "VARCHAR(5000) DEFAULT 'N/A'")
+    private String rawCpuProcessesHistory;
+
+    @Column(name = "parsed_cpu_processes_history",columnDefinition = "VARCHAR(5000) DEFAULT 'N/A'")
+    private String parsedCpuProcessesHistory;
+
     @Override
     public String toString() {
         return "Device {\n" +

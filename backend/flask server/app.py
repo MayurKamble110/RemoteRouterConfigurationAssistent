@@ -45,7 +45,7 @@ def ask_ai():
     text = data['text']
     try:
         model = ChatGoogleGenerativeAI(model='gemini-pro', google_api_key=os.getenv('GOOGLE_KEY'),
-                                       convert_system_message_to_human=True)
+                                       convert_system_message_to_human=True,temperature=0.1)
         response = model.invoke(text)
         cleaned_response = remove_special_characters(response.content)
         return cleaned_response
