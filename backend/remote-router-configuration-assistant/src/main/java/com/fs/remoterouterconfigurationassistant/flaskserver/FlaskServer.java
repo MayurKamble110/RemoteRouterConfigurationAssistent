@@ -1,5 +1,7 @@
 package com.fs.remoterouterconfigurationassistant.flaskserver;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -91,7 +93,7 @@ public class FlaskServer {
         return null;
     }
 
-    public static String analyseRouter(Long deviceId) throws ResourceAccessException, BadRequestException {
+    public static String analyseRouter(Long deviceId) throws BadRequestException, ResourceAccessException{
         String ANALYSE_ROUTER_ENDPOINT = "http://localhost:5000/analyse-router";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -119,7 +121,7 @@ public class FlaskServer {
         }
     }
 
-    public static String analyseInterface(Long interfaceId) throws ResourceAccessException, BadRequestException {
+    public static String analyseInterface(Long interfaceId) throws BadRequestException,ResourceAccessException {
         String ANALYSE_ROUTER_ENDPOINT = "http://localhost:5000/analyse-interface";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -147,8 +149,7 @@ public class FlaskServer {
         }
     }
 
-    public static String getParsedCpuProcessHistoryData(FlaskServerApiRequestBody body)
-    {
+    public static String getParsedCpuProcessHistoryData(FlaskServerApiRequestBody body) throws JsonParseException, ResourceAccessException {
         body.setText(body.getText()+body.getPrompt());
         ObjectMapper objectMapper = new ObjectMapper();
         RestTemplate restTemplate = new RestTemplate();
@@ -171,13 +172,11 @@ public class FlaskServer {
                                 .replaceAll("json", "");
                 System.out.println(responseBody);
                 return responseBody;
-
-            } else {
-                System.err.println("Failed to get a successful response from the server.");
             }
-
-        } catch (Exception e) {
-            System.out.println(e);
+        } catch(JsonProcessingException e){
+            throw new JsonParseException("Json Parsing failed.");
+        } catch (ResourceAccessException e) {
+            throw new ResourceAccessException("Server is not responding.");
         }
         return "0";
     }
