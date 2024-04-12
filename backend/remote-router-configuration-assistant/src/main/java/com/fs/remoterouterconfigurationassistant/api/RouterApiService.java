@@ -64,7 +64,7 @@ public class RouterApiService {
         return true;
     }
 
-    public String executeCommandOnRouter(CommandRequest commandRequest) {
+    public String executeCommandOnRouter(CommandRequest commandRequest) throws ResourceAccessException,JsonProcessingException{
         StringBuilder output = new StringBuilder();
         try {
             if (session != null && session.isConnected()) {
@@ -129,7 +129,7 @@ public class RouterApiService {
         return FlaskServer.analyseRouter(deviceId);
     }
 
-    public Map<String, CpuProcessHistoryDto> getCpuProcessHistory(Long deviceId) throws JsonProcessingException {
+    public Map<String, CpuProcessHistoryDto> getCpuProcessHistory(Long deviceId) throws JsonProcessingException, BadRequestException {
         Optional<NetworkDeviceDao> networkDeviceDao = networkDeviceRepository.findById(deviceId);
 
         if(networkDeviceDao.isPresent())
@@ -141,10 +141,7 @@ public class RouterApiService {
             System.out.println(cpuDataMap);
 
             return cpuDataMap;
-
         }
-
-        return null;
-
+        throw new BadRequestException("Requested resource not found.");
     }
 }

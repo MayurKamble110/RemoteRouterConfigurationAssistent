@@ -43,12 +43,15 @@ public class RouterApi {
     }
 
     @PostMapping(path = "/commands")
-    public String executeCommandOnRouter(@RequestBody CommandRequest commandRequest) {
-
-        String response = routerApiService.executeCommandOnRouter(commandRequest);
-
-
-        return response;
+    public ResponseEntity<?> executeCommandOnRouter(@RequestBody CommandRequest commandRequest) {
+        try {
+            String response = routerApiService.executeCommandOnRouter(commandRequest);
+            return ResponseEntity.ok(response);
+        } catch (JsonProcessingException e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY);
+        }catch (ResourceAccessException e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.SERVICE_UNAVAILABLE);
+        }
     }
 
 
@@ -86,9 +89,14 @@ public class RouterApi {
     }
 
     @GetMapping(path = "/{deviceId}/cpu-process-history")
-    public Map<String, CpuProcessHistoryDto> getCpuProcessHistoryData(@PathVariable Long deviceId)
-                    throws JsonProcessingException {
-           return routerApiService.getCpuProcessHistory(deviceId);
+    public ResponseEntity<?> getCpuProcessHistoryData(@PathVariable Long deviceId){
+        try {
+            return ResponseEntity.ok(routerApiService.getCpuProcessHistory(deviceId));
+        }catch (JsonProcessingException e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY);
+        }catch (BadRequestException e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
     }
 
 //    @PostMapping("/test")

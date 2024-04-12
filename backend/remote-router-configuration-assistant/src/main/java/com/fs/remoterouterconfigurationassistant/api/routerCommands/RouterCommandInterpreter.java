@@ -1,11 +1,14 @@
 package com.fs.remoterouterconfigurationassistant.api.routerCommands;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.fs.remoterouterconfigurationassistant.api.model.CommandRequest;
 import com.fs.remoterouterconfigurationassistant.databases.DeviceInterfaceRepositoryService;
 import com.fs.remoterouterconfigurationassistant.databases.NetworkDeviceRepositoryService;
 import com.fs.remoterouterconfigurationassistant.databases.ShowVersionRepositoryService;
+import org.springframework.web.client.ResourceAccessException;
 
 @Service
 public class RouterCommandInterpreter {
@@ -19,7 +22,7 @@ public class RouterCommandInterpreter {
     @Autowired
     NetworkDeviceRepositoryService networkDeviceRepositoryService;
 
-    public void processor(StringBuilder response, CommandRequest commandRequest) {
+    public void processor(StringBuilder response, CommandRequest commandRequest) throws BadRequestException, JsonParseException, ResourceAccessException {
         switch (commandRequest.getCommand()) {
             case "show interface":
                 deviceInterfaceRepositoryService.saveDeviceInterfaceDataToDatabase(response.toString(),
