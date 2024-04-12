@@ -5,6 +5,9 @@ import org.springframework.stereotype.Repository;
 
 import com.fs.remoterouterconfigurationassistant.databases.entities.NetworkDeviceDao;
 
+import jakarta.transaction.Transactional;
+
 @Repository
+@Transactional
 public interface NetworkDeviceRepository extends JpaRepository<NetworkDeviceDao,Long> {
 }

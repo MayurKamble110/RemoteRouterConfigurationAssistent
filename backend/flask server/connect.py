@@ -2,8 +2,8 @@ import logging
 import psycopg2
 
 dbname = "postgres"
-user = "admin"
-password = "admin"
+user = "postgres"
+password = "123"
 host = "localhost"
 port = "5432"
 

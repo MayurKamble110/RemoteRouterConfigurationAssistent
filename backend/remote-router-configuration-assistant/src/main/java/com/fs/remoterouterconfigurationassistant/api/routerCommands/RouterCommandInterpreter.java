@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.fs.remoterouterconfigurationassistant.api.model.CommandRequest;
 import com.fs.remoterouterconfigurationassistant.databases.DeviceInterfaceRepositoryService;
+import com.fs.remoterouterconfigurationassistant.databases.NetworkDeviceRepositoryService;
 import com.fs.remoterouterconfigurationassistant.databases.ShowVersionRepositoryService;
 
 @Service
@@ -15,6 +16,9 @@ public class RouterCommandInterpreter {
     @Autowired
     ShowVersionRepositoryService showVersionRepositoryService;
 
+    @Autowired
+    NetworkDeviceRepositoryService networkDeviceRepositoryService;
+
     public void processor(StringBuilder response, CommandRequest commandRequest) {
         switch (commandRequest.getCommand()) {
             case "show interface":
@@ -25,8 +29,9 @@ public class RouterCommandInterpreter {
                 showVersionRepositoryService.addVersionDataToDatabase(response.toString(),
                                 commandRequest.getDeviceId());
                 break;
-            case "show ip route":
-                System.out.println("Yet to write logic");
+            case "show processes cpu history":
+                networkDeviceRepositoryService.addCpuProcessesHistoryToDatabase(response.toString(),commandRequest.getDeviceId());
+
                 break;
             default:
                 System.out.println("Invalid command......");
