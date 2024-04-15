@@ -3,12 +3,25 @@ import * as React from 'react';
 import { useEffect } from "react";
 import { fetchDevices } from '../api';
 import Forms from './Forms';
+import { useDispatch } from 'react-redux';
+import { deviceActions } from '../Store';
+import { useNavigate } from 'react-router-dom'
 
 
 export default function Content() {
   const [devices, setDevices] = React.useState([]);
-
+  const navigate = useNavigate();
   const [openForm, setOpenForm] = React.useState(false);
+  const dispatch = useDispatch();
+  
+  function handleDeviceData(id,name){
+    dispatch(deviceActions.clickedDevice({
+     id,
+     name
+    }));
+    console.log(id,name);
+    navigate("/device");
+ }
 
   function handleFormOpen() {
     setOpenForm(true);
@@ -94,8 +107,7 @@ export default function Content() {
                             <td>{device.osVersion}</td>
                             <td>
                               {device.osVersion}
-                              <button type="button" class="btn btn-block btn-secondary">View Logs</button>
-                            </td>
+                              <button onClick={()=>(handleDeviceData(device.deviceId,device.deviceName))} type="button" class="btn btn-block btn-secondary">View Data</button>                            </td>
                           </tr>
                         ))}
                       </tbody>
