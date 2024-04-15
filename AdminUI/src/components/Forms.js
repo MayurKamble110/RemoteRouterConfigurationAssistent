@@ -13,15 +13,10 @@ export default function Forms(props) {
   }
 
   const [formData, setFormData] = useState(initialFormValues);
-  const [errorMessage, setErrorMessage] = useState('');
 
   const handleCloseModal = async (event) => {
     event.preventDefault();
     try {
-      if (!formData.username || !formData.ipAddress || !formData.deviceName || !formData.password || !formData.enablePassword) {
-        setErrorMessage('Please Fill all the feilds');
-        return;
-      }
 
       const response = await fetch('http://localhost:8080/api/routers', {
         method: 'POST',
@@ -49,25 +44,20 @@ export default function Forms(props) {
     }));
   };
 
-  function handleCloseIcon()
-    {
-        setErrorMessage('');
-        props.onClose();
-    }
-
-
   return (
 
 
-    <div className="content-wrapper">
+    // <div className="content-wrapper">
       <section className="content">
         <div className="container-fluid">
-          <div className="col-md-6">
-          
+
+            {/* general form elements */}
             <div className="card card-primary ">
               <div className="card-header card card-primary d-flex align-items-center justify-content-center">
-              <button onClick={handleCloseIcon} style={{ marginLeft: 'auto', background: 'none', border: 'none', cursor: 'pointer', fontSize: '1rem', color: '#000'  }}><img src="/imgs/close-button-png-30241.png" style={{width : '25px' , height : '25px'}}></img></button>
-              <h3 className="card-title">Add Device</h3>
+                <button type="button" style={{ marginLeft: 'auto'}}className="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h2 className="card-title">Add Device</h2>
               </div>
               <form>
                 <div className="card-body popup-background ">
@@ -94,19 +84,17 @@ export default function Forms(props) {
                     </div>
                   </div>
                 </div>
-                <p style={{ color: 'red' }}>{errorMessage}</p>
                 <div className="card-footer text-center">
-                  <button type="submit" className="btn btn-primary" onClick={handleCloseModal}>Submit</button>
+                  <button type="submit" className="btn btn-primary" onClick={handleCloseModal}data-dismiss="modal">Submit</button>
                 </div>
               </form>
             </div>
 
             {/* /.card */}
           </div>
-        </div>{/* /.container-fluid */}
       </section>
-      {/* /.content */}
-    </div>
+
+    // </div>
 
   )
 }
