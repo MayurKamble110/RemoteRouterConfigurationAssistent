@@ -17,7 +17,9 @@ import com.fs.remoterouterconfigurationassistant.api.model.CommandRequest;
 import com.fs.remoterouterconfigurationassistant.api.model.CpuProcessHistoryDto;
 import com.fs.remoterouterconfigurationassistant.api.model.FlaskServerApiRequestBody;
 import com.fs.remoterouterconfigurationassistant.api.model.NewDevice;
+import com.fs.remoterouterconfigurationassistant.databases.DeviceInterfaceRepository;
 import com.fs.remoterouterconfigurationassistant.databases.ShowInterfaceRepositoryService;
+import com.fs.remoterouterconfigurationassistant.databases.entities.DeviceInterfaceDao;
 import com.fs.remoterouterconfigurationassistant.databases.entities.NetworkDeviceDao;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,9 @@ public class RouterApi {
 
     @Autowired
     ShowInterfaceRepositoryService service;
+
+    @Autowired
+    DeviceInterfaceRepository deviceInterfaceRepository;
 
     @PostMapping(path = "/connect")
     public String makeSSHConnectionToRouter(@RequestBody RouterAccessDetails accessDetails) {
@@ -77,6 +82,12 @@ public class RouterApi {
 
         return networkDeviceDaoList;
 
+    }
+
+    @GetMapping(path = "/{deviceId}/interfaces")
+    public List<DeviceInterfaceDao> getInterfaceData(@PathVariable Long deviceId){
+        List<DeviceInterfaceDao> deviceInterfaceDaoList = routerApiService.getInterfacesByDeviceId(deviceId);
+        return deviceInterfaceDaoList;
     }
 
     @GetMapping(path = "/{deviceId}/analyse")

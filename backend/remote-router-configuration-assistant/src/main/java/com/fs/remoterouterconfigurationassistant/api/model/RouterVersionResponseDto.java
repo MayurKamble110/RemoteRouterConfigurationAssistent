@@ -12,5 +12,5 @@ import lombok.Setter;
 public class RouterVersionResponseDto {
     String os_type;
     String os_version;
-
+    String hardware_model;
 }
