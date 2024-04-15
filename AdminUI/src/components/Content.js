@@ -13,15 +13,15 @@ export default function Content() {
   const navigate = useNavigate();
   const [openForm, setOpenForm] = React.useState(false);
   const dispatch = useDispatch();
-  
-  function handleDeviceData(id,name){
+
+  function handleDeviceData(id, name) {
     dispatch(deviceActions.clickedDevice({
-     id,
-     name
+      id,
+      name
     }));
-    console.log(id,name);
+    console.log(id, name);
     navigate("/device");
- }
+  }
 
   function handleFormOpen() {
     setOpenForm(true);
@@ -52,8 +52,6 @@ export default function Content() {
     loadScript();
   }, [openForm]);
 
-
-
   return (
     <>
       {openForm && <Forms onClose={handleFormClose}></Forms>}
@@ -66,10 +64,30 @@ export default function Content() {
               </div>
               <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                  <button type="button" class="btn btn-block btn-secondary" onClick={handleFormOpen}>Add Device</button>
+                  {/* <button type="button" class="btn btn-block btn-secondary" onClick={handleFormOpen}>Add Device</button> */}
+                  <button type="button" class="btn btn-block btn-secondary" data-toggle="modal" data-target="#modal-default">
+                    Add Device</button>
                 </ol>
               </div>
             </div>
+          </div>
+
+          <div className="modal fade" id="modal-default">
+            <div className="modal-dialog modal-l">
+              <div className="modal-content">
+                
+                <div>
+                <Forms/>
+                </div>
+                
+                <div className="modal-footer justify-content-between">
+                  <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
+                  <button type="button" className="btn btn-primary">Save changes</button>
+                </div>
+              </div>
+              {/* /.modal-content */}
+            </div>
+            {/* /.modal-dialog */}
           </div>
         </section>
         <section className="content">
@@ -107,7 +125,7 @@ export default function Content() {
                             <td>{device.osVersion}</td>
                             <td>
                               {device.osVersion}
-                              <button onClick={()=>(handleDeviceData(device.deviceId,device.deviceName))} type="button" class="btn btn-block btn-secondary">View Data</button>                            </td>
+                              <button onClick={() => (handleDeviceData(device.deviceId, device.deviceName))} type="button" class="btn btn-block btn-secondary">View Data</button>                            </td>
                           </tr>
                         ))}
                       </tbody>
