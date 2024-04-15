@@ -18,7 +18,7 @@ public class ShowVersionRepositoryService {
     {
         RouterVersionResponseDto routerVersionResponseDto=
         FlaskServer.getRouterVersionResponseDto(new FlaskServerApiRequestBody(response,
-                "Give a JSON  object including os_type and os_version. all these fields should be of string type."));
+                "Give a JSON  object including os_type, os_version and hardware_model. all these fields should be of string type."));
         NetworkDeviceDao deviceDao = networkDeviceRepository.getReferenceById(deviceId);
         NetworkDeviceDao deviceDao1 = NetworkDeviceDao.builder()
                 .deviceId(deviceDao.getDeviceId())
@@ -29,7 +29,7 @@ public class ShowVersionRepositoryService {
                 .enablePassword(deviceDao.getEnablePassword())
                 .osType(routerVersionResponseDto.getOs_type())
                 .osVersion(routerVersionResponseDto.getOs_version())
-                .hardwareModel(deviceDao.getHardwareModel())
+                .hardwareModel(routerVersionResponseDto.getHardware_model())
                 .rawLogs(deviceDao.getRawLogs())
                 .deviceType(deviceDao.getDeviceType())
                 .build();

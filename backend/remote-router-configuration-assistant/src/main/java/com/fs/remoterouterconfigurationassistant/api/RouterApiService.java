@@ -7,8 +7,10 @@ import com.fs.remoterouterconfigurationassistant.api.model.CommandRequest;
 import com.fs.remoterouterconfigurationassistant.api.model.CpuProcessHistoryDto;
 import com.fs.remoterouterconfigurationassistant.api.model.NewDevice;
 import com.fs.remoterouterconfigurationassistant.api.routerCommands.RouterCommandInterpreter;
+import com.fs.remoterouterconfigurationassistant.databases.DeviceInterfaceRepository;
 import com.fs.remoterouterconfigurationassistant.databases.NetworkDeviceRepository;
 import com.fs.remoterouterconfigurationassistant.databases.NetworkDeviceRepositoryService;
+import com.fs.remoterouterconfigurationassistant.databases.entities.DeviceInterfaceDao;
 import com.fs.remoterouterconfigurationassistant.databases.entities.NetworkDeviceDao;
 import com.fs.remoterouterconfigurationassistant.flaskserver.FlaskServer;
 import com.jcraft.jsch.Channel;
@@ -45,6 +47,9 @@ public class RouterApiService {
 
     @Autowired
     NetworkDeviceRepository networkDeviceRepository;
+
+    @Autowired
+    DeviceInterfaceRepository deviceInterfaceRepository;
     public boolean connectToRouter(RouterAccessDetails accessDetails) {
         String username = accessDetails.getUsername();
         String password = accessDetails.getPassword();
@@ -123,6 +128,16 @@ public class RouterApiService {
     public List<NetworkDeviceDao> getAllNetworkDevices()
     {
         return networkDeviceRepository.findAll();
+    }
+
+    public List<DeviceInterfaceDao> getInterfacesByDeviceId(long deviceId) {
+        List<DeviceInterfaceDao> interfaces = new ArrayList<>();
+        List<DeviceInterfaceDao> in = deviceInterfaceRepository.findAll();
+        for ( DeviceInterfaceDao iface : in) {
+            if(iface.getNetworkDeviceDao().getDeviceId() == deviceId )
+                interfaces.add(iface);
+        }
+        return interfaces;
     }
 
     public String analyseRouter(Long deviceId) throws ResourceAccessException, BadRequestException {
