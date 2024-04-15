@@ -126,7 +126,8 @@ public class RouterApiService {
     }
 
     public String analyseRouter(Long deviceId) throws ResourceAccessException, BadRequestException {
-        return FlaskServer.analyseRouter(deviceId);
+        String rawOutput = FlaskServer.analyseRouter(deviceId);
+        return rawOutput.replaceAll("\\*\\*(.*?)\\*\\*", "<b>$1</b>");
     }
 
     public Map<String, CpuProcessHistoryDto> getCpuProcessHistory(Long deviceId) throws JsonProcessingException, BadRequestException {
