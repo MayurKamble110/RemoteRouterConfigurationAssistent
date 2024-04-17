@@ -1,17 +1,20 @@
-import { configureStore , createSlice } from '@reduxjs/toolkit';
+import { configureStore, createSlice } from '@reduxjs/toolkit';
+import { combineReducers } from 'redux';
+import { persistReducer, persistStore } from 'redux-persist'
+import storage from 'redux-persist/lib/storage';
+
 
 const initialDeviceState = {
-    deviceId : 0 ,
-    deviceName : ''
+    deviceId: null,
+    deviceName: ''
 }
-
 
 const deviceSlice = createSlice(
     {
-        name : 'device',
-        initialState : initialDeviceState ,
-        reducers : {
-            clickedDevice(state , action){
+        name: 'device',
+        initialState: initialDeviceState,
+        reducers: {
+            clickedDevice(state, action) {
                 state.deviceId = action.payload.id;
                 state.deviceName = action.payload.name;
             }
@@ -19,13 +22,25 @@ const deviceSlice = createSlice(
     }
 )
 
-
-const store = configureStore({
-    reducer : {
-        device : deviceSlice.reducer,
-    }
+const rootReducer = combineReducers({
+    device: deviceSlice.reducer,
 });
 
-export default store ;
+const persistConfig = {
+    key: 'root',
+    storage,
+    version: 1,
+};
 
-export const deviceActions = deviceSlice.actions ;
+const persistedReducers = persistReducer(persistConfig, rootReducer);
+
+
+
+
+const store = configureStore({
+    reducer: persistedReducers
+});
+
+export default store;
+export const persistor = persistStore(store);
+export const deviceActions = deviceSlice.actions;

@@ -11,7 +11,6 @@ import { useNavigate } from 'react-router-dom'
 export default function Content() {
   const [devices, setDevices] = React.useState([]);
   const navigate = useNavigate();
-  const [openForm, setOpenForm] = React.useState(false);
   const dispatch = useDispatch();
 
   function handleDeviceData(id, name) {
@@ -23,39 +22,42 @@ export default function Content() {
     navigate("/device");
   }
 
-  function handleFormOpen() {
-    setOpenForm(true);
-  }
 
-  function handleFormClose() {
-    setOpenForm(false);
-  }
+
+  const loadScript = async () => {
+    try {
+      const response = await fetchDevices();
+      console.log(response);
+      setDevices(response);
+      console.log(devices);
+      const script = document.createElement("script");
+      script.src = `js/content.js`;
+      script.async = true;
+
+      document.body.appendChild(script);
+    } catch (error) {
+      console.error('Error loading script:', error);
+    }
+  };
 
   useEffect(() => {
-    const loadScript = async () => {
-      try {
-        if (!openForm) {
-          const response = await fetchDevices();
-          setDevices(response);
-        }
-
-        const script = document.createElement("script");
-        script.src = `js/content.js`;
-        script.async = true;
-
-        document.body.appendChild(script);
-      } catch (error) {
-        console.error('Error loading script:', error);
-      }
-    };
-
     loadScript();
-  }, [openForm]);
+  }, []);
 
   return (
     <>
-      {openForm && <Forms onClose={handleFormClose}></Forms>}
-      {!openForm && <div className="content-wrapper">
+      <div className="modal fade" id="modal-default">
+        <div className="modal-dialog modal-l">
+          <div className="modal-content">
+
+            <div>
+              <Forms addDevice={loadScript} />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="content-wrapper">
         <section className="content-header">
           <div className="container-fluid">
             <div className="row mb-2">
@@ -64,27 +66,11 @@ export default function Content() {
               </div>
               <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                  {/* <button type="button" class="btn btn-block btn-secondary" onClick={handleFormOpen}>Add Device</button> */}
                   <button type="button" class="btn btn-block btn-secondary" data-toggle="modal" data-target="#modal-default">
                     Add Device</button>
                 </ol>
               </div>
             </div>
-          </div>
-
-          <div className="modal fade" id="modal-default">
-            <div className="modal-dialog modal-l">
-              <div className="modal-content">
-                
-                <div>
-                <Forms/>
-                </div>
-                
-    
-              </div>
-              {/* /.modal-content */}
-            </div>
-            {/* /.modal-dialog */}
           </div>
         </section>
         <section className="content">
@@ -101,7 +87,6 @@ export default function Content() {
                         <tr>
                           <th>Device ID</th>
                           <th>Name</th>
-                          <th>Type</th>
                           <th>Hardware Model</th>
                           <th>IP Address</th>
                           <th>OS Type</th>
@@ -110,19 +95,17 @@ export default function Content() {
                         </tr>
                       </thead>
                       <tbody>
-
                         {devices.map(device => (
                           <tr key={device.deviceId}>
                             <td>{device.deviceId}</td>
                             <td>{device.deviceName}</td>
-                            <td>{device.deviceType}</td>
-                            <td>{device.hardwareModel}</td>
+                            <td>{device.hardwareModel || 'Not Available'}</td>
                             <td>{device.ipAddress}</td>
-                            <td>{device.osType}</td>
-                            <td>{device.osVersion}</td>
+                            <td>{device.osType || 'N/A'}</td>
+                            <td>{device.osVersion || 'N/A'}</td>
                             <td>
-                              {device.osVersion}
-                              <button onClick={() => (handleDeviceData(device.deviceId, device.deviceName))} type="button" class="btn btn-block btn-secondary">View Data</button>                            </td>
+                              <button onClick={() => (handleDeviceData(device.deviceId, device.deviceName))} type="button" class="btn btn-block btn-secondary">View Data</button>
+                            </td>
                           </tr>
                         ))}
                       </tbody>
@@ -133,7 +116,7 @@ export default function Content() {
             </div>
           </div>
         </section>
-      </div>}
+      </div>
     </>
   )
 }
