@@ -60,6 +60,10 @@ def analyse_interface():
     interface_id = data['interface_id']
     try:
         interface_logs = get_raw_interface_logs(interface_id)
+        if interface_logs is None:
+            return 'NO_DATA'
+        elif interface_logs == 'NO_DEVICE':
+            return 'NO_DEVICE'
         model = ChatGoogleGenerativeAI(model='gemini-pro', google_api_key=os.getenv('GOOGLE_KEY'),
                                        convert_system_message_to_human=True,temperature=0.1)
         prompt = ("You are a helpful network administration advisor. "
@@ -83,6 +87,10 @@ def analyse_router():
     router_id = data['device_id']
     try:
         router_logs = get_raw_router_logs(router_id)
+        if router_logs is None:
+            return 'NO_DATA'
+        elif router_logs == 'NO_DEVICE':
+            return 'NO_DEVICE'
         model = ChatGoogleGenerativeAI(model='gemini-pro', google_api_key=os.getenv('GOOGLE_KEY'),
                                        convert_system_message_to_human=True,temperature=0.1)
         prompt = ("You are a helpful network administration advisor. "

@@ -8,21 +8,36 @@
   import Charts from './components/Charts';
   import DeviceData from './components/DeviceData';
 import CommandsInfo from './components/CommandsInfo';
-
+import LoginPage from './components/SignIn Components/LoginPage';
+import ForgotPassword from './components/SignIn Components/Forgot-password';
+import Register from './components/SignIn Components/Register';
+let isLoggedIn = false;
   function App() {
     return (
       <Router>
         <div>
+        {isLoggedIn 
+          ? 
+          (<Routes>
+            <Route path="/" Component={LoginPage} />
+            <Route path="/register" Component={Register} />
+            <Route path="/forgot-password" Component={ForgotPassword} />
+          </Routes>)
+          : 
+        (<>
         <Header/>
         <SideNav/>
         <Routes>
-            <Route path="/" Component={Content} />
+            
+            <Route path="/content" Component={Content} />
             <Route path='/device' Component={DeviceData}/>
             <Route path='/commands' Component={CommandsInfo}/>
         </Routes>
         <Footer/>
+        </>)}
       </div>
      </Router>
+  
     );
   }
 
