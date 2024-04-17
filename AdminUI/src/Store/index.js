@@ -9,6 +9,11 @@ const initialDeviceState = {
     deviceName: ''
 }
 
+const initialUserState = {
+    userName: null,
+    jwtToken: null
+}
+
 const deviceSlice = createSlice(
     {
         name: 'device',
@@ -22,8 +27,22 @@ const deviceSlice = createSlice(
     }
 )
 
+const userSlice = createSlice(
+    {
+        name: 'user',
+        initialState: initialUserState,
+        reducers: {
+            signInSuccess(state, action) {
+                state.userName = action.payload.userName;
+                state.jwtToken = action.payload.jwtToken;
+            }
+        }
+    }
+)
+
 const rootReducer = combineReducers({
     device: deviceSlice.reducer,
+    user: userSlice.reducer
 });
 
 const persistConfig = {
@@ -44,3 +63,4 @@ const store = configureStore({
 export default store;
 export const persistor = persistStore(store);
 export const deviceActions = deviceSlice.actions;
+export const userActions = userSlice.actions;

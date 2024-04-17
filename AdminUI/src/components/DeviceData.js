@@ -94,7 +94,7 @@ export default function DeviceData() {
   }, [chartData]);
 
   function handleBackButton() {
-    navigate("/");
+    navigate("/content");
   }
 
   return (
@@ -115,7 +115,6 @@ export default function DeviceData() {
                   {/* <button onClick={getAnalyseData} type="button" className="mr-2 btn btn-secondary">Analyse Data</button> */}
                   <button onClick={getAnalyseData} type="button" class="mr-2 btn btn-secondary" data-toggle="modal" data-target="#modal-default">
                     Analyse Data</button>
-                  <button type="button" className="btn btn-secondary">Connect</button>
                 </div>
               </div>
             </div>

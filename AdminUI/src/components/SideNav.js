@@ -32,11 +32,11 @@ export default function SideNav() {
                 <p>
                   Dashboard
                   {/* <i className="right fas fa-angle-left" /> */}
-                {/* </p>
+            {/* </p>
               </a>
-            </li> */} 
+            </li> */}
             <li className="nav-item">
-            <Link to="/" className="nav-link">
+              <Link to="/content" className="nav-link">
                 <i className="nav-icon fas fa-tachometer-alt" />
                 <p>
                   Devices
@@ -44,7 +44,7 @@ export default function SideNav() {
               </Link>
             </li>
             <li className="nav-item">
-            <Link to="/commands" className="nav-link">
+              <Link to="/commands" className="nav-link">
                 <i className="nav-icon fas fa-edit" />
                 <p>
                   Commands
