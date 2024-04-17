@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import Chart from 'chart.js/auto';
+import { useNavigate } from 'react-router-dom';
 import Loader from './Spinner';
 
 
@@ -9,9 +10,12 @@ export default function DeviceData() {
   const deviceId = useSelector(state => state.device.deviceId);
   const deviceName = useSelector(state => state.device.deviceName);
   const [chartData, setChartData] = useState({});
+  const [interfaceData, setInterfaceData] = useState([]);
+  const [interfaceId, setInterfaceId] = useState(0);
+  const navigate = useNavigate();
+  const chartRefs = useRef([null, null, null, null]);
   const [analyseInfo, setAnalyseInfo] = useState('');
 
-  const chartRefs = useRef([null, null, null, null])
   const getAnalyseData = async () => {
     try {
       const response = await fetch(`http://localhost:8080/api/routers/${deviceId}/analyse`);
@@ -28,6 +32,22 @@ export default function DeviceData() {
   };
 
   useEffect(() => {
+    const fetchInterfaceData = async () => {
+      try {
+        const response = await fetch(`http://localhost:8080/api/routers/${deviceId}/interfaces`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch data");
+        }
+        const responseData = await response.json();
+        setInterfaceData(responseData);
+      } catch (error) {
+        console.error('Error fetching chart data:', error);
+      }
+    };
+    fetchInterfaceData();
+  }, []);
+
+  useEffect(() => {
     const destroyCharts = () => {
       chartRefs.current.forEach((chartRef) => {
         if (chartRef && chartRef.chart) {
@@ -37,15 +57,12 @@ export default function DeviceData() {
     };
 
     const fetchChartData = async () => {
-      // setIsLoading(true);
       try {
         const response = await fetch(`http://localhost:8080/api/routers/${deviceId}/cpu-process-history`);
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }
-        console.log(response);
         const responseData = await response.json();
-        console.log(responseData);
         setChartData(responseData);
       } catch (error) {
         console.error('Error fetching chart data:', error);
@@ -76,12 +93,19 @@ export default function DeviceData() {
     });
   }, [chartData]);
 
+  function handleBackButton() {
+    navigate("/content");
+  }
+
   return (
     <>
       <div className="content-wrapper">
         {/* Content Header (Page header) */}
         <section className="content-header">
           <div className="container-fluid">
+            <div>
+              <img src="/imgs/arrow.png" style={{ width: '30px', height: '20px' }} onClick={handleBackButton}></img>
+            </div>
             <div className="row mb-2">
               <div className="col-sm-6">
                 <h1>{deviceName}</h1>
@@ -91,7 +115,6 @@ export default function DeviceData() {
                   {/* <button onClick={getAnalyseData} type="button" className="mr-2 btn btn-secondary">Analyse Data</button> */}
                   <button onClick={getAnalyseData} type="button" class="mr-2 btn btn-secondary" data-toggle="modal" data-target="#modal-default">
                     Analyse Data</button>
-                  <button type="button" className="btn btn-secondary">Connect</button>
                 </div>
               </div>
             </div>
@@ -107,10 +130,10 @@ export default function DeviceData() {
                   </button>
                 </div>
                 <div className="modal-body">
-                  {analyseInfo &&<div dangerouslySetInnerHTML={{ __html: analyseInfo }} /> }
+                  {analyseInfo && <div dangerouslySetInnerHTML={{ __html: analyseInfo }} />}
                   {!analyseInfo && <Loader ></Loader>}
                 </div>
-              
+
               </div>
               {/* /.modal-content */}
             </div>
@@ -119,7 +142,6 @@ export default function DeviceData() {
 
 
         </section>
-        {/* Main content */}
         <section className="content">
           <div className="container-fluid">
             <div className="row">
@@ -132,24 +154,17 @@ export default function DeviceData() {
                       100
                     </span>
                   </div>
-                  {/* /.info-box-content */}
                 </div>
-                {/* /.info-box */}
               </div>
-              {/* /.col */}
               <div className="col-12 col-sm-6 col-md-3">
                 <div className="info-box mb-3">
-                  <span className="info-box-icon bg-success elevation-1"><ion-icon name="caret-up-outline"></ion-icon> </span>                 
+                  <span className="info-box-icon bg-success elevation-1"><ion-icon name="caret-up-outline"></ion-icon> </span>
                   <div className="info-box-content">
                     <span className="info-box-text">UP Interfaces</span>
                     <span className="info-box-number">41</span>
                   </div>
-                  {/* /.info-box-content */}
                 </div>
-                {/* /.info-box */}
               </div>
-              {/* /.col */}
-              {/* fix for small devices only */}
               <div className="clearfix hidden-md-up" />
               <div className="col-12 col-sm-6 col-md-3">
                 <div className="info-box mb-3">
@@ -158,11 +173,8 @@ export default function DeviceData() {
                     <span className="info-box-text">Down Interfaces</span>
                     <span className="info-box-number">59</span>
                   </div>
-                  {/* /.info-box-content */}
                 </div>
-                {/* /.info-box */}
               </div>
-              {/* /.col */}
               <div className="col-12 col-sm-6 col-md-3">
                 <div className="info-box mb-3">
                   <span className="info-box-icon bg-warning elevation-1"><i className="fas fa-users" /></span>
@@ -170,11 +182,8 @@ export default function DeviceData() {
                     <span className="info-box-text">Money</span>
                     <span className="info-box-number">2,000</span>
                   </div>
-                  {/* /.info-box-content */}
                 </div>
-                {/* /.info-box */}
               </div>
-              {/* /.col */}
             </div>
           </div>
         </section>
@@ -185,7 +194,7 @@ export default function DeviceData() {
               <div className="col-12">
                 <div className="card">
                   <div className="card-header">
-                    <h3 className="card-title">Fixed Header Table</h3>
+                    <h3 className="card-title">Interface Data</h3>
                     <div className="card-tools">
                       <div className="input-group input-group-sm" style={{ width: 150 }}>
                         <input type="text" name="table_search" className="form-control float-right" placeholder="Search" />
@@ -197,84 +206,52 @@ export default function DeviceData() {
                       </div>
                     </div>
                   </div>
-                  {/* /.card-header */}
                   <div className="card-body table-responsive p-0" style={{ height: 300 }}>
                     <table className="table table-head-fixed text-nowrap">
                       <thead>
                         <tr>
-                          <th>ID</th>
-                          <th>User</th>
-                          <th>Date</th>
+                          <th>Name</th>
+                          <th>Description</th>
                           <th>Status</th>
-                          <th>Reason</th>
+                          <th>Raw Data</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td>183</td>
-                          <td>John Doe</td>
-                          <td>11-7-2014</td>
-                          <td><span className="tag tag-success">Approved</span></td>
-                          <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                        </tr>
-                        <tr>
-                          <td>219</td>
-                          <td>Alexander Pierce</td>
-                          <td>11-7-2014</td>
-                          <td><span className="tag tag-warning">Pending</span></td>
-                          <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                        </tr>
-                        <tr>
-                          <td>657</td>
-                          <td>Bob Doe</td>
-                          <td>11-7-2014</td>
-                          <td><span className="tag tag-primary">Approved</span></td>
-                          <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                        </tr>
-                        <tr>
-                          <td>175</td>
-                          <td>Mike Doe</td>
-                          <td>11-7-2014</td>
-                          <td><span className="tag tag-danger">Denied</span></td>
-                          <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                        </tr>
-                        <tr>
-                          <td>134</td>
-                          <td>Jim Doe</td>
-                          <td>11-7-2014</td>
-                          <td><span className="tag tag-success">Approved</span></td>
-                          <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                        </tr>
-                        <tr>
-                          <td>494</td>
-                          <td>Victoria Doe</td>
-                          <td>11-7-2014</td>
-                          <td><span className="tag tag-warning">Pending</span></td>
-                          <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                        </tr>
-                        <tr>
-                          <td>832</td>
-                          <td>Michael Doe</td>
-                          <td>11-7-2014</td>
-                          <td><span className="tag tag-primary">Approved</span></td>
-                          <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                        </tr>
-                        <tr>
-                          <td>982</td>
-                          <td>Rocky Doe</td>
-                          <td>11-7-2014</td>
-                          <td><span className="tag tag-danger">Denied</span></td>
-                          <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                        </tr>
+                        {
+                          interfaceData.map(item => (
+                            <tr key={item.id}>
+                              <td>{item.interfaceName}</td>
+                              <td>{item.description || 'N/A'}</td>
+                              <td>{item.connected ? 'Up' : 'Down'}</td>
+                              <td>
+                                <button type="button" class="btn btn-block btn-secondary" data-toggle="modal" data-target="#modal-interface" onClick={() => { setInterfaceId(item.id) }}>
+                                  View Data</button>
+                              </td>
+                            </tr>
+                          ))
+                        }
                       </tbody>
                     </table>
+                    <div className="modal fade" id="modal-interface">
+                      <div className="modal-dialog modal-l">
+                        <div className="modal-content">
+                          <div class="modal-header">
+                            <h4 class="modal-title">Raw Data for {interfaceData.find(item => (item.id === interfaceId))?.interfaceName}</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div style={{ padding: '20px' }}>
+                            {interfaceData.find(item => (item.id === interfaceId))?.rawLogs}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  {/* /.card-body */}
                 </div>
-                {/* /.card */}
               </div>
             </div>
-          </div>{/* /.container-fluid */}
+          </div>
         </section>
 
         <section className="content-header">
