@@ -1,25 +1,58 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 export default function Register() {
-    const [userName, setUserName] = useState('');
-    const [email, setEmail] = useState('');
+    const [name, setName] = useState('');
+    const [emailID, setEmail] = useState('');
     const [password, setPassword] =useState('');
+    const navigate = useNavigate();
 
-    function submitHandler(){
-        console.log('Clickefd')
+    const submitHandler = async(event)=>{
+        console.log(name);
+        event.preventDefault();
+        try{
+            const response = await fetch('http://localhost:8080/auth/create-user',{
+                method : 'POST',
+                headers : {
+                    'Content-Type' : 'application/json',
+                },
+                body : JSON.stringify({emailID, name, password }),
+                mode: 'cors'
+            });
+
+            if(!response.ok)
+             throw new Error('Invalid Credentials');
+            
+             const data = await response.text();
+
+            if(data)
+            {
+                navigate('/');
+            }
+            else
+            {
+                console.log('login failed');
+            }
+
+; 
+        }
+        catch(e)
+        {
+            console.log(e.message);
+        }
     }
     return (
-        <div className="hold-transition login-page">
+        <div className="hold-transition login-page" style={{ backgroundColor: "#454d55" }}>
             <div className="register-box">
                 <div className="card card-outline card-primary">
                     <div className="card-header text-center">
-                        <p className="h1"><b>FS</b> Net-Insight</p>
+                        <p className="h1">FS Net-Insight</p>
                     </div>
                     <div className="card-body">
                         <p className="login-box-msg">Register a new membership</p>
                         <form>
                             <div className="input-group mb-3">
-                                <input type="text" className="form-control" placeholder="Full name" onChange={e=>setUserName(e.target.value)}/>
+                                <input type="text" className="form-control" placeholder="Username" onChange={e=>setName(e.target.value)}/>
                                 <div className="input-group-append">
                                     <div className="input-group-text">
                                         <span className="fas fa-user" />
@@ -35,21 +68,21 @@ export default function Register() {
                                 </div>
                             </div>
                             <div className="input-group mb-3">
-                                <input type="password" className="form-control" placeholder="Password" />
+                                <input type="password" className="form-control" placeholder="Password" onChange={e => setPassword(e.target.value)} />
                                 <div className="input-group-append">
                                     <div className="input-group-text">
                                         <span className="fas fa-lock" />
                                     </div>
                                 </div>
                             </div>       
-                            <div className="row">
-                                <div className="col-4">
-                                    <button onClick={submitHandler} type="submit" className="btn btn-primary btn-block">Register</button>
+                            <div className="row" style={{ display: 'flex', justifyContent: 'center' }}>
+                                <div className="col-4" >
+                                    <button onClick={submitHandler} type="submit" className="btn btn-primary btn-block" style={{ textAlign: 'center' }}>Register</button>
                                 </div>
-    
-                            </div>
+                             </div>
                         </form>
-                        <Link to="/" className="text-center">I already have a membership</Link>
+        
+                        <Link to="/" className="text-center" style={{ marginTop:'10px', display: 'flex', justifyContent: 'center' }}>I already have a membership</Link>
                     </div>
                     {/* /.form-box */}
                 </div>{/* /.card */}

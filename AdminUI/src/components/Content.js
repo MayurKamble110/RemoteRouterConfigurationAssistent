@@ -10,9 +10,26 @@ import { useNavigate } from 'react-router-dom'
 
 export default function Content() {
   const [devices, setDevices] = React.useState([]);
+  const [checkBoxSelection, setCheckBoxSelection] = React.useState({
+    deviceChecked : []
+  })
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const checkBoxHandler = (deviceId) => {
+    setCheckBoxSelection((prevState) => {
+      if (prevState.deviceChecked.includes(deviceId)) {
+        return ({
+          deviceChecked : prevState.deviceChecked.filter((id)=>id !== deviceId)
+        })
+      } else {
+        return({
+          deviceChecked : [...prevState.deviceChecked , deviceId ]
+        })
+      }
+    });
+    console.log(checkBoxSelection);
+  };
   function handleDeviceData(id, name) {
     dispatch(deviceActions.clickedDevice({
       id,
@@ -85,7 +102,7 @@ export default function Content() {
                     <table id="example1" className="table table-bordered table-striped">
                       <thead>
                         <tr>
-                          <th>Device ID</th>
+                          <th>Checkbox</th>
                           <th>Name</th>
                           <th>Hardware Model</th>
                           <th>IP Address</th>
@@ -97,7 +114,17 @@ export default function Content() {
                       <tbody>
                         {devices.map(device => (
                           <tr key={device.deviceId}>
-                            <td>{device.deviceId}</td>
+                            <td>
+                            <div className="custom-control custom-checkbox">
+                              <input
+                               className="custom-control-input" 
+                               type="checkbox" 
+                               id={`customCheckbox${device.deviceId}`} 
+                               defaultValue="option1"
+                               onChange={()=>checkBoxHandler(device.deviceId)} />
+                              <label htmlFor={`customCheckbox${device.deviceId}`} className="custom-control-label"></label>
+                            </div>
+                            </td>
                             <td>{device.deviceName}</td>
                             <td>{device.hardwareModel || 'Not Available'}</td>
                             <td>{device.ipAddress}</td>
