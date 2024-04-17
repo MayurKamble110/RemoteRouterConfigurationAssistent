@@ -1,21 +1,13 @@
 package com.fs.remoterouterconfigurationassistant.api;
 
-import java.io.Serial;
-import java.rmi.ServerException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fs.remoterouterconfigurationassistant.RouterAccessDetails;
 import com.fs.remoterouterconfigurationassistant.api.model.CommandRequest;
-import com.fs.remoterouterconfigurationassistant.api.model.CpuProcessHistoryDto;
-import com.fs.remoterouterconfigurationassistant.api.model.FlaskServerApiRequestBody;
 import com.fs.remoterouterconfigurationassistant.api.model.NewDevice;
 import com.fs.remoterouterconfigurationassistant.databases.DeviceInterfaceRepository;
 import com.fs.remoterouterconfigurationassistant.databases.ShowInterfaceRepositoryService;
@@ -24,7 +16,6 @@ import com.fs.remoterouterconfigurationassistant.databases.entities.NetworkDevic
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.ResourceAccessException;
-import org.springframework.web.client.RestTemplate;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
