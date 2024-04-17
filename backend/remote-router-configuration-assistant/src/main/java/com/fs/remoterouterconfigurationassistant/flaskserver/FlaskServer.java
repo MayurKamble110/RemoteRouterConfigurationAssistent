@@ -13,6 +13,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fs.remoterouterconfigurationassistant.api.model.FlaskServerApiRequestBody;
 import com.fs.remoterouterconfigurationassistant.api.model.RouterInterfaceResponceDto;
 import com.fs.remoterouterconfigurationassistant.api.model.RouterVersionResponseDto;
+import com.fs.remoterouterconfigurationassistant.api.model.ShowInventoryDto;
 
 public class FlaskServer {
 
@@ -83,6 +84,43 @@ public class FlaskServer {
                 RouterVersionResponseDto routerVersionResponseDto =
                                 mapper.readValue(responseBody, RouterVersionResponseDto.class);
                 return routerVersionResponseDto;
+            } else {
+                System.err.println("Failed to get a successful response from the server.");
+            }
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+
+    public static ShowInventoryDto getShowInventoryDto(FlaskServerApiRequestBody body) {
+
+        body.setText(body.getText()+body.getPrompt());
+        ObjectMapper objectMapper = new ObjectMapper();
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        try {
+            String jsonBody = objectMapper.writeValueAsString(body);
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<String> requestEntity = new HttpEntity<>(jsonBody, headers);
+
+            ResponseEntity<String> responseEntity = restTemplate.postForEntity(
+                    flaskServerApiEndpoint,
+                    requestEntity,
+                    String.class);
+            System.out.println(responseEntity.getBody());
+            if (responseEntity.getStatusCode().is2xxSuccessful()) {
+                String responseBody = responseEntity.getBody()
+                        .replaceAll("```", "")
+                        .replaceAll("JSON", "")
+                        .replaceAll("json", "");
+                System.out.println("Parsed responce..... \n"+responseBody);
+                ObjectMapper mapper = new ObjectMapper();
+                ShowInventoryDto showInventoryDto =
+                        mapper.readValue(responseBody, ShowInventoryDto.class);
+                return showInventoryDto;
             } else {
                 System.err.println("Failed to get a successful response from the server.");
             }
