@@ -2,8 +2,8 @@ import logging
 import psycopg2
 
 dbname = "postgres"
-user = "postgres"
-password = "123"
+user = "abhi"
+password = "1234"
 host = "localhost"
 port = "5432"
 
@@ -45,6 +45,8 @@ def get_raw_interface_logs(interface_id):
         query = "SELECT raw_logs FROM device_interface WHERE interface_id = %s"
         cursor.execute(query, (interface_id,))
         logs = cursor.fetchall()
+        if len(logs) == 0:
+            return "NO_INTERFACE"
         return logs[0][0]
     except Exception as e:
         logging.error(f"get_raw_interface_logs() {type(e)}")
@@ -55,6 +57,8 @@ def get_raw_router_logs(device_id):
         query = "SELECT raw_logs FROM network_devices WHERE device_id = %s"
         cursor.execute(query, (device_id,))
         logs = cursor.fetchall()
+        if len(logs) == 0:
+            return "NO_DEVICE"
         return logs[0][0]
     except Exception as e:
         logging.error(f"get_router_logs() {type(e)}")
