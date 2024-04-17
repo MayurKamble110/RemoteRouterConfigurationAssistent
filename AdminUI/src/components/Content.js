@@ -80,10 +80,7 @@ export default function Content() {
                 <Forms/>
                 </div>
                 
-                <div className="modal-footer justify-content-between">
-                  <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
-                  <button type="button" className="btn btn-primary">Save changes</button>
-                </div>
+    
               </div>
               {/* /.modal-content */}
             </div>

@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import Chart from 'chart.js/auto';
+import Loader from './Spinner';
 
 
 export default function DeviceData() {
@@ -8,8 +9,23 @@ export default function DeviceData() {
   const deviceId = useSelector(state => state.device.deviceId);
   const deviceName = useSelector(state => state.device.deviceName);
   const [chartData, setChartData] = useState({});
+  const [analyseInfo, setAnalyseInfo] = useState('');
 
   const chartRefs = useRef([null, null, null, null])
+  const getAnalyseData = async () => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/routers/${deviceId}/analyse`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+      console.log(response);
+      const analyseData = await response.text();
+      console.log(analyseData);
+      setAnalyseInfo(analyseData);
+    } catch (error) {
+      console.error('Error fetching app data:', error);
+    }
+  };
 
   useEffect(() => {
     const destroyCharts = () => {
@@ -71,12 +87,37 @@ export default function DeviceData() {
                 <h1>{deviceName}</h1>
               </div>
               <div className="col-sm-6">
-                <ol className="breadcrumb float-sm-right">
-                  <button type="button" class="btn btn-block btn-secondary">Connect</button>
-                </ol>
+                <div className="breadcrumb float-sm-right">
+                  {/* <button onClick={getAnalyseData} type="button" className="mr-2 btn btn-secondary">Analyse Data</button> */}
+                  <button onClick={getAnalyseData} type="button" class="mr-2 btn btn-secondary" data-toggle="modal" data-target="#modal-default">
+                    Analyse Data</button>
+                  <button type="button" className="btn btn-secondary">Connect</button>
+                </div>
               </div>
             </div>
           </div>{/* /.container-fluid */}
+
+          <div className="modal fade" id="modal-default">
+            <div className="modal-dialog">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h4 className="modal-title">Analysing data for {deviceName}</h4>
+                  <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                  </button>
+                </div>
+                <div className="modal-body">
+                  {analyseInfo &&<div dangerouslySetInnerHTML={{ __html: analyseInfo }} /> }
+                  {!analyseInfo && <Loader ></Loader>}
+                </div>
+              
+              </div>
+              {/* /.modal-content */}
+            </div>
+            {/* /.modal-dialog */}
+          </div>
+
+
         </section>
         {/* Main content */}
         <section className="content">
@@ -84,12 +125,11 @@ export default function DeviceData() {
             <div className="row">
               <div className="col-12 col-sm-6 col-md-3">
                 <div className="info-box">
-                  <span className="info-box-icon bg-info elevation-1"><i className="fas fa-cog" /></span>
+                  <span className="info-box-icon bg-info elevation-1"><ion-icon name="radio-button-on-outline"></ion-icon></span>
                   <div className="info-box-content">
-                    <span className="info-box-text">CPU Traffic</span>
+                    <span className="info-box-text">Total Interfaces</span>
                     <span className="info-box-number">
-                      10
-                      <small>%</small>
+                      100
                     </span>
                   </div>
                   {/* /.info-box-content */}
@@ -99,10 +139,10 @@ export default function DeviceData() {
               {/* /.col */}
               <div className="col-12 col-sm-6 col-md-3">
                 <div className="info-box mb-3">
-                  <span className="info-box-icon bg-danger elevation-1"><i className="fas fa-thumbs-up" /></span>
+                  <span className="info-box-icon bg-success elevation-1"><ion-icon name="caret-up-outline"></ion-icon> </span>                 
                   <div className="info-box-content">
-                    <span className="info-box-text">Likes</span>
-                    <span className="info-box-number">41,410</span>
+                    <span className="info-box-text">UP Interfaces</span>
+                    <span className="info-box-number">41</span>
                   </div>
                   {/* /.info-box-content */}
                 </div>
@@ -113,10 +153,10 @@ export default function DeviceData() {
               <div className="clearfix hidden-md-up" />
               <div className="col-12 col-sm-6 col-md-3">
                 <div className="info-box mb-3">
-                  <span className="info-box-icon bg-success elevation-1"><i className="fas fa-shopping-cart" /></span>
+                  <span className="info-box-icon bg-danger elevation-1"><ion-icon name="caret-down-outline"></ion-icon></span>
                   <div className="info-box-content">
-                    <span className="info-box-text">Sales</span>
-                    <span className="info-box-number">760</span>
+                    <span className="info-box-text">Down Interfaces</span>
+                    <span className="info-box-number">59</span>
                   </div>
                   {/* /.info-box-content */}
                 </div>
@@ -127,7 +167,7 @@ export default function DeviceData() {
                 <div className="info-box mb-3">
                   <span className="info-box-icon bg-warning elevation-1"><i className="fas fa-users" /></span>
                   <div className="info-box-content">
-                    <span className="info-box-text">New Members</span>
+                    <span className="info-box-text">Money</span>
                     <span className="info-box-number">2,000</span>
                   </div>
                   {/* /.info-box-content */}
@@ -253,31 +293,31 @@ export default function DeviceData() {
           </div>
         </section>
         <section className="content">
-        {Object.keys(chartData).map((chartId) => (
-          <div className="container-fluid">
-            <div className="row">
-              <div className="col-md-6">
-              {/* {Object.keys(chartData).map((chartId) => ( */}
-                <div className="card card-primary">
-                  <div className="card-header">
-                    <h3 className="card-title">Area Chart</h3>
-                    <div className="card-tools">
-                      <button type="button" className="btn btn-tool" data-card-widget="collapse">
-                        <i className="fas fa-minus" />
-                      </button>
-                      <button type="button" className="btn btn-tool" data-card-widget="remove">
-                        <i className="fas fa-times" />
-                      </button>
+          {Object.keys(chartData).map((chartId) => (
+            <div className="container-fluid">
+              <div className="row">
+                <div className="col-md-6">
+                  {/* {Object.keys(chartData).map((chartId) => ( */}
+                  <div className="card card-primary">
+                    <div className="card-header">
+                      <h3 className="card-title">Area Chart</h3>
+                      <div className="card-tools">
+                        <button type="button" className="btn btn-tool" data-card-widget="collapse">
+                          <i className="fas fa-minus" />
+                        </button>
+                        <button type="button" className="btn btn-tool" data-card-widget="remove">
+                          <i className="fas fa-times" />
+                        </button>
+                      </div>
+                    </div>
+                    <div className="card-body">
+                      {/* <canvas ref={chartRefs[0]} style={{ minHeight: 250, height: 250, maxHeight: 250, maxWidth: '100%' }} /> */}
+                      <canvas key={chartId} ref={(ref) => (chartRefs.current[chartId] = ref)} style={{ minHeight: 250, height: 250, maxHeight: 250, maxWidth: '100%' }}></canvas>
+
                     </div>
                   </div>
-                  <div className="card-body">
-                    {/* <canvas ref={chartRefs[0]} style={{ minHeight: 250, height: 250, maxHeight: 250, maxWidth: '100%' }} /> */}
-                      <canvas key={chartId} ref={(ref) => (chartRefs.current[chartId] = ref)} style={{ minHeight: 250, height: 250, maxHeight: 250, maxWidth: '100%' }}></canvas>
-            
-                  </div>
-                </div>
-              {/* ))} */}
-                {/* <div className="card card-danger">
+                  {/* ))} */}
+                  {/* <div className="card card-danger">
                   <div className="card-header">
                     <h3 className="card-title">Donut Chart</h3>
                     <div className="card-tools">
@@ -293,8 +333,8 @@ export default function DeviceData() {
                     <canvas ref={chartRef2} style={{ minHeight: 250, height: 250, maxHeight: 250, maxWidth: '100%' }} />
                   </div>
                 </div> */}
-              </div>
-              {/* <div className="col-md-6">
+                </div>
+                {/* <div className="col-md-6">
                 <div className="card card-danger">
                   <div className="card-header">
                     <h3 className="card-title">Pie Chart</h3>
@@ -328,9 +368,9 @@ export default function DeviceData() {
                   </div>
                 </div>
               </div> */}
+              </div>
             </div>
-          </div>
-         ))}
+          ))}
         </section>
         {/* /.content */}
       </div>

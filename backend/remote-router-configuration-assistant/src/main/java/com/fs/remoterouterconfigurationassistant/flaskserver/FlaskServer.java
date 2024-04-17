@@ -147,8 +147,10 @@ public class FlaskServer {
                     requestEntity,
                     String.class);
             if (responseEntity.getStatusCode().is2xxSuccessful()) {
-                if(responseEntity.getBody().equals("null"))
+                if(responseEntity.getBody().equals("NO_DEVICE"))
                     throw new BadRequestException("Device not found");
+                else if(responseEntity.getBody().equals("NO_DATA"))
+                    throw new BadRequestException("Data not found");
                 return responseEntity.getBody();
             } else {
                 System.out.println("Failed to get a successful response from the server.");

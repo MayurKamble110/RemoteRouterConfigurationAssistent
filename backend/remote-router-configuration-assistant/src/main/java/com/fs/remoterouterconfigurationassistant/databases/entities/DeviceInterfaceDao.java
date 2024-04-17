@@ -39,7 +39,7 @@ public class DeviceInterfaceDao {
     @Column(name = "is_connected")
     private boolean isConnected;
 
-    @Column(name = "description")
+    @Column(name = "description", length = 5000)
     private String description;
 
     @Column(name = "raw_logs",length = 5000)

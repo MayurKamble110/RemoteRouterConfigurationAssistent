@@ -95,9 +95,9 @@ public class RouterApi {
         try {
             return ResponseEntity.ok(routerApiService.analyseRouter(deviceId));
         } catch (ResourceAccessException e) {
-            return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.SERVICE_UNAVAILABLE);
         } catch (BadRequestException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
 
