@@ -26,7 +26,7 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("Username not found");
         }
         User user = userOptional.get();
-        List<String> roles = roleRepository.findByEmailID(emailID);
+        List<String> roles = roleRepository.findAllRoleStringsByEmailID(emailID);
         return new CustomUserDetails(user,roles);
     }
 }

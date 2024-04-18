@@ -7,14 +7,18 @@ import com.fs.remoterouterconfigurationassistant.auth.entities.Role;
 import com.fs.remoterouterconfigurationassistant.auth.entities.User;
 import com.fs.remoterouterconfigurationassistant.auth.util.BcryptPasswordGenerator;
 import com.fs.remoterouterconfigurationassistant.auth.util.JwtUtil;
+import jakarta.transaction.Transactional;
+import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -59,7 +63,10 @@ public class AuthenticationApiService {
                 .build();
         return new AuthenticationResponse(token,userDto);
     }
-    public void createUser(User user){
+    public void createUser(User user) throws BadRequestException {
+        boolean isUserAlreadyPresent=userRepository.existsById(user.getEmailID());
+        if(isUserAlreadyPresent)
+            throw new BadRequestException("User already exist");
         User newUser=User.builder()
                 .emailID(user.getEmailID())
                 .name(user.getName())
@@ -72,5 +79,19 @@ public class AuthenticationApiService {
                 .role("ROLE_ADMIN")
                 .build();
         roleRepository.save(role);
+    }
+
+    @Transactional
+    public void deleteUser(String emailID){
+        Optional<User> userOptional=userRepository.findById(emailID);
+        if(userOptional.isPresent()) {
+            User user=userOptional.get();
+            List<Role> roles=roleRepository.findAllRolesByEmailID(user.getEmailID());
+            for(Role role:roles)
+                roleRepository.delete(role);
+            userRepository.delete(user);
+            return;
+        }
+        throw new UsernameNotFoundException("Username not found");
     }
 }

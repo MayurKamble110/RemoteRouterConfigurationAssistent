@@ -13,5 +13,8 @@ import java.util.List;
 @Transactional
 public interface RoleRepository extends JpaRepository<Role, RoleID> {
     @Query("SELECT role.role FROM Role role WHERE role.user.emailID = :emailID")
-    List<String> findByEmailID(String emailID);
+    List<String> findAllRoleStringsByEmailID(String emailID);
+
+    @Query("SELECT role FROM Role role WHERE role.user.emailID = :emailID")
+    List<Role> findAllRolesByEmailID(String emailID);
 }

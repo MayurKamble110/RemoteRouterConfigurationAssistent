@@ -15,7 +15,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Role {
     @Id
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.DETACH,
+    CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinColumn(name = "email_id")
     private User user;
 
