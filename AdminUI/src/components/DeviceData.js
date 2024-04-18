@@ -265,12 +265,7 @@ export default function DeviceData() {
               <div className="col-sm-6">
                 <h1>ChartJS</h1>
               </div>
-              <div className="col-sm-6">
-                <ol className="breadcrumb float-sm-right">
-                  <li className="breadcrumb-item"><a href="#">Home</a></li>
-                  <li className="breadcrumb-item active">ChartJS</li>
-                </ol>
-              </div>
+
             </div>
           </div>
         </section>
