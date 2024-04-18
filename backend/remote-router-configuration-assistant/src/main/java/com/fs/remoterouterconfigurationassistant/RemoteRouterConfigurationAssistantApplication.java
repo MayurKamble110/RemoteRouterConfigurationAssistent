@@ -14,6 +14,6 @@ import org.springframework.context.annotation.ComponentScan;
 public class RemoteRouterConfigurationAssistantApplication {
 
 	public static void main(String[] args) {
-		ConfigurableApplicationContext context= SpringApplication.run(RemoteRouterConfigurationAssistantApplication.class, args);
+		SpringApplication.run(RemoteRouterConfigurationAssistantApplication.class, args);
 	}
 }
