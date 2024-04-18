@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom"
+import { useSelector } from "react-redux"
 export default function SideNav() {
+  const name = useSelector((state)=>state.user.userName);
   return (
     <aside className="main-sidebar sidebar-dark-primary elevation-4">
       {/* Brand Logo */}
@@ -17,7 +19,7 @@ export default function SideNav() {
             <img src="dist/img/user2-160x160.jpg" className="img-circle elevation-2" alt="User Image" />
           </div>
           <div className="info">
-            <a href="#" className="d-block">Shreyash Bhatale</a>
+            <a href="#" className="d-block">{name}</a>
           </div>
         </div>
 
