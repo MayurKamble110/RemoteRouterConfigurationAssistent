@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { userActions } from "../../Store";
 
 export default function LoginPage(){
     const [emailID, setEmailID] = useState('');
     const [password, setPassword] = useState('');
+    const dispatch = useDispatch();
 
     const navigate = useNavigate();
     const submitHandler = async(event)=>{
@@ -21,11 +24,17 @@ export default function LoginPage(){
             if(!response.ok)
             throw new Error('Invalid Credentials');
            
-            const data = await response.text();
+            const data = await response.json();
 
-           if(data)
+           if(data.jwt)
            {
-               navigate('/content');
+            dispatch(userActions.signInSuccess({
+                userName : data.userDto.name,
+                jwtToken : data.jwt
+            }))
+            const userName = data.userDto.name;
+            console.log(userName);
+            navigate('/content');
            }
            else
            {

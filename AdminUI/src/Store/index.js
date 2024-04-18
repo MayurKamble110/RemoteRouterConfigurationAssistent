@@ -22,6 +22,9 @@ const deviceSlice = createSlice(
             clickedDevice(state, action) {
                 state.deviceId = action.payload.id;
                 state.deviceName = action.payload.name;
+            },
+            resetDevice(state){
+                return initialDeviceState;
             }
         }
     }
@@ -35,6 +38,9 @@ const userSlice = createSlice(
             signInSuccess(state, action) {
                 state.userName = action.payload.userName;
                 state.jwtToken = action.payload.jwtToken;
+            },
+            resetUser(state){
+                return initialUserState ;
             }
         }
     }
@@ -45,7 +51,7 @@ const rootReducer = combineReducers({
     user: userSlice.reducer
 });
 
-const persistConfig = {
+const persistConfig = { 
     key: 'root',
     storage,
     version: 1,
