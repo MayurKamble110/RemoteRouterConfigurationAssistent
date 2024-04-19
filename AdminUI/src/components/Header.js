@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux";
 import { userActions } from "../Store";
 import { deviceActions } from "../Store";
+import { LoginSuccessToast } from "../data/ToastData";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -10,6 +11,7 @@ export default function Header() {
   const logoutHandler = ()=>{
     dispatch(userActions.resetUser());
     dispatch(deviceActions.resetDevice());
+    LoginSuccessToast('User Successfully Logged Out');
   }
   return (
     <nav className="main-header navbar navbar-expand navbar-dark">

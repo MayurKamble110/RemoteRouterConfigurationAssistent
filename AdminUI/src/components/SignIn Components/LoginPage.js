@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { userActions } from "../../Store";
+import { NotifyErrorToast, LoginErrorToast, LoginSuccessToast} from "../../data/ToastData";
 
 export default function LoginPage(){
     const [emailID, setEmailID] = useState('');
@@ -14,7 +15,7 @@ export default function LoginPage(){
         event.preventDefault();
         try {
             const response = await fetch('http://localhost:8080/auth/login',{
-                method : 'POST',
+                method : 'POST',    
                 headers : {
                     'Content-Type' : 'application/json',
                 },
@@ -34,14 +35,16 @@ export default function LoginPage(){
             }))
             const userName = data.userDto.name;
             console.log(userName);
+            LoginSuccessToast(`USER: ${userName} Successfully logged in`);
             navigate('/content');
            }
            else
            {
-               console.log('login failed');
+               NotifyErrorToast('Login Falied due to internal server error');
            }
         } catch (e) {
-            console.log(e.message)
+             LoginErrorToast(`Login Falied due to ${e.message}`);
+            
         }
     }
     return (

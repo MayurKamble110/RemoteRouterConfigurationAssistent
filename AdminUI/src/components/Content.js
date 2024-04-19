@@ -83,7 +83,9 @@ export default function Content() {
               </div>
               <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                  <button type="button" class="btn btn-block btn-secondary" data-toggle="modal" data-target="#modal-default">
+                  <button type="button" class="mr-3 btn btn-secondary" data-toggle="modal" data-target="">
+                    Connect</button>
+                    <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modal-default">
                     Add Device</button>
                 </ol>
               </div>

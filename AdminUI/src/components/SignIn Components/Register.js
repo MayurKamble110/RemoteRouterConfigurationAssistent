@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom";
+import { NotifyErrorToast, NotifySuccessToast } from "../../data/ToastData";
 export default function Register() {
     const [name, setName] = useState('');
     const [emailID, setEmail] = useState('');
@@ -19,14 +20,16 @@ export default function Register() {
                 body : JSON.stringify({emailID, name, password }),
                 mode: 'cors'
             });
-
-            if(!response.ok)
-             throw new Error('Invalid Credentials');
-            
+            console.log(response);
+            if(response.status == 400)
+            {
+                NotifyErrorToast('User Already Exists..');
+            }
              const data = await response.text();
 
             if(data)
             {
+                NotifySuccessToast(`Successfully registered user ${name}`)
                 navigate('/');
             }
             else
@@ -39,6 +42,7 @@ export default function Register() {
         catch(e)
         {
             console.log(e.message);
+            NotifyErrorToast(`${e.error}`);
         }
     }
     return (
@@ -52,7 +56,7 @@ export default function Register() {
                         <p className="login-box-msg">Register a new membership</p>
                         <form>
                             <div className="input-group mb-3">
-                                <input type="text" className="form-control" placeholder="Username" onChange={e=>setName(e.target.value)}/>
+                                <input type="text" className="form-control" placeholder="Name" onChange={e=>setName(e.target.value)}/>
                                 <div className="input-group-append">
                                     <div className="input-group-text">
                                         <span className="fas fa-user" />

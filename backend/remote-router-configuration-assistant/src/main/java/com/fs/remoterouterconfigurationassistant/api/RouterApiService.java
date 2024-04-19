@@ -132,12 +132,7 @@ public class RouterApiService {
 
     public List<DeviceInterfaceDao> getInterfacesByDeviceId(long deviceId) {
         List<DeviceInterfaceDao> interfaces = new ArrayList<>();
-        List<DeviceInterfaceDao> in = deviceInterfaceRepository.findAll();
-        for ( DeviceInterfaceDao iface : in) {
-            if(iface.getNetworkDeviceDao().getDeviceId() == deviceId )
-                interfaces.add(iface);
-        }
-        return interfaces;
+        return deviceInterfaceRepository.getInterfaceBySortedOrder(deviceId);
     }
 
     public String analyseRouter(Long deviceId) throws ResourceAccessException, BadRequestException {
