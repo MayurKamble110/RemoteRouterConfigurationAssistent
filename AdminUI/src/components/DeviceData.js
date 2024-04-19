@@ -39,6 +39,7 @@ export default function DeviceData() {
           throw new Error("Failed to fetch data");
         }
         const responseData = await response.json();
+        console.log(responseData)
         setInterfaceData(responseData);
       } catch (error) {
         console.error('Error fetching chart data:', error);
@@ -97,6 +98,9 @@ export default function DeviceData() {
     navigate("/content");
   }
 
+  function ImageClickHandler() {
+    console.log("Hello")
+  }
   return (
     <>
       <div className="content-wrapper">
@@ -113,7 +117,8 @@ export default function DeviceData() {
               <div className="col-sm-6">
                 <div className="breadcrumb float-sm-right">
                   {/* <button onClick={getAnalyseData} type="button" className="mr-2 btn btn-secondary">Analyse Data</button> */}
-                  <button onClick={getAnalyseData} type="button" class="mr-2 btn btn-secondary" data-toggle="modal" data-target="#modal-default">
+                  <img onClick={ImageClickHandler} src="/imgs/BOT_logo.jpg" alt="BOT Logo" className="mr-3 brand-image img-circle elevation-3" style={{ height:'40px', width: '40px', opacity: '.9' }} />
+                  <button onClick={getAnalyseData} type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modal-default">
                     Analyse Data</button>
                 </div>
               </div>

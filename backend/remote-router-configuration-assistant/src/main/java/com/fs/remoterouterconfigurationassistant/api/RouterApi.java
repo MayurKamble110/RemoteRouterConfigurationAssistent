@@ -105,6 +105,24 @@ public class RouterApi {
         }
     }
 
+    @GetMapping(path = "/{deviceId}/interfaces/count")
+    public int getInterfacesCount(@PathVariable Long deviceId)
+    {
+        return deviceInterfaceRepository.getInterfaceCount(deviceId);
+    }
+
+    @GetMapping(path = "/{deviceId}/interfaces/count/up")
+    public int getUpInterfacesCount(@PathVariable Long deviceId)
+    {
+        return deviceInterfaceRepository.getUpInterfaceCount(deviceId);
+    }
+
+    @GetMapping(path = "/{deviceId}/interfaces/count/down")
+    public int getDownInterfacesCount(@PathVariable Long deviceId)
+    {
+        return deviceInterfaceRepository.getDownInterfaceCount(deviceId);
+    }
+
 //    @PostMapping("/test")
 //    public String test()
 //    {

@@ -40,7 +40,6 @@ public class FlaskServer {
                                 .replaceAll("```", "")
                                 .replaceAll("JSON", "")
                                 .replaceAll("json", "");
-                System.out.println(responseBody);
                 ObjectMapper mapper = new ObjectMapper();
                 RouterInterfaceResponceDto routerInterfaceResponseDto =
                                 mapper.readValue(responseBody, RouterInterfaceResponceDto.class);
