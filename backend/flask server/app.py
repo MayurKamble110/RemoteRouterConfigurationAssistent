@@ -20,12 +20,13 @@ def ask_chat_bot():
     data = request.get_json()
     text = data['text']
     username = data['username']
+    device_id = data['device_id']
     try:
         message_history = ChatMessageHistory()
         message_history = load_message_history(data['username'],
+                                               device_id=device_id,
                                                message_history=message_history,
                                                message=data['text'])
-        print(message_history)
         response = chat_with_chain(text, message_history=message_history)
         cleaned_response = remove_special_characters(response)
         save_message(username=username, human_message=text, ai_message=cleaned_response)
@@ -45,7 +46,7 @@ def ask_ai():
     text = data['text']
     try:
         model = ChatGoogleGenerativeAI(model='gemini-pro', google_api_key=os.getenv('GOOGLE_KEY'),
-                                       convert_system_message_to_human=True,temperature=0.1)
+                                       convert_system_message_to_human=True, temperature=0.1)
         response = model.invoke(text)
         cleaned_response = remove_special_characters(response.content)
         return cleaned_response
@@ -72,7 +73,7 @@ def analyse_interface():
                   ", vulnerabilities the router may "
                   "be exposed to and recommendations to mitigate the risks."
                   "All these 3 fields to be in a new paragraph. "
-                  "The response must be under 100 words. "
+                  "The response must under 100 words. "
                   "Here are the logs ")
         response = model.invoke(prompt + interface_logs)
         return response.content

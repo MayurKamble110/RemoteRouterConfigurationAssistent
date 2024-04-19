@@ -2,8 +2,8 @@ import logging
 import psycopg2
 
 dbname = "postgres"
-user = "abhi"
-password = "1234"
+user = "admin"
+password = "admin"
 host = "localhost"
 port = "5432"
 
@@ -68,7 +68,7 @@ def prune_message_history(username):
     try:
         query = ("DELETE FROM message_history WHERE username = %s AND id NOT IN "
                  "( SELECT id FROM message_history WHERE username = %s "
-                 " ORDER BY id DESC LIMIT 5 )")
+                 " ORDER BY id DESC LIMIT 3 )")
         cursor.execute(query, (username, username))
         connection.commit()
     except Exception as e:
