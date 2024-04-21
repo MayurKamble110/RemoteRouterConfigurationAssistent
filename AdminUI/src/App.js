@@ -1,17 +1,11 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Header from "./components/Header";
-<<<<<<< HEAD
-import SideNav from "./components/SideNav";
-import Footer from "./components/Footer";
-import Content from "./components/Content";
-=======
 import Home from "./components/Home";
 import SideNav from "./components/SideNav";
 import Footer from "./components/Footer";
 import Content from "./components/Content";
 import Charts from './components/Charts';
->>>>>>> 8c16ec5 (add device from updated)
 import DeviceData from './components/DeviceData';
 import CommandsInfo from './components/CommandsInfo';
 import LoginPage from './components/SignIn Components/LoginPage';

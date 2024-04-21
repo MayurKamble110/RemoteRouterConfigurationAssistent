@@ -59,7 +59,7 @@ export default function Modal(props) {
 
     return (
         <dialog id="dialog" ref={modalRef} style={{
-            width: '500px', backgroundColor: '#343a40',
+            width: '400px', backgroundColor: '#343a40',
             border: '1px solid #343a40'
         }} onClose={props.closeModal}>
             <div className="card card-primary ">

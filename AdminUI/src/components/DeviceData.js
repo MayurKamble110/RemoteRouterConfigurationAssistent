@@ -117,7 +117,7 @@ export default function DeviceData() {
               <div className="col-sm-6">
                 <div className="breadcrumb float-sm-right">
                   {/* <button onClick={getAnalyseData} type="button" className="mr-2 btn btn-secondary">Analyse Data</button> */}
-                  <img onClick={ImageClickHandler} src="/imgs/BOT_logo.jpg" alt="BOT Logo" className="mr-3 brand-image img-circle elevation-3" style={{ height:'40px', width: '40px', opacity: '.9' }} />
+                  <img onClick={ImageClickHandler} src="/imgs/BOT_logo.jpg" alt="BOT Logo" className="mr-3 brand-image img-circle elevation-3" style={{ height: '40px', width: '40px', opacity: '.9' }} />
                   <button onClick={getAnalyseData} type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modal-default">
                     Analyse Data</button>
                 </div>
@@ -193,6 +193,22 @@ export default function DeviceData() {
           </div>
         </section>
 
+        <div className="modal fade" id="modal-interface">
+          <div className="modal-dialog modal-l">
+            <div className="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title">Raw Data for {interfaceData.find(item => (item.id === interfaceId))?.interfaceName}</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div style={{ padding: '20px' }}>
+                {interfaceData.find(item => (item.id === interfaceId))?.rawLogs}
+              </div>
+            </div>
+          </div>
+        </div>
+
         <section className="content">
           <div className="container-fluid">
             <div className="row">
@@ -237,21 +253,6 @@ export default function DeviceData() {
                         }
                       </tbody>
                     </table>
-                    <div className="modal fade" id="modal-interface">
-                      <div className="modal-dialog modal-l">
-                        <div className="modal-content">
-                          <div class="modal-header">
-                            <h4 class="modal-title">Raw Data for {interfaceData.find(item => (item.id === interfaceId))?.interfaceName}</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                              <span aria-hidden="true">&times;</span>
-                            </button>
-                          </div>
-                          <div style={{ padding: '20px' }}>
-                            {interfaceData.find(item => (item.id === interfaceId))?.rawLogs}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>
