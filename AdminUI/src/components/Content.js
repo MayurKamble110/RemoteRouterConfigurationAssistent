@@ -2,29 +2,30 @@
 import * as React from 'react';
 import { useEffect } from "react";
 import { fetchDevices } from '../api';
-import Forms from './Forms';
 import { useDispatch } from 'react-redux';
 import { deviceActions } from '../Store';
 import { useNavigate } from 'react-router-dom'
+import Modal from './Modal';
 
 
 export default function Content() {
   const [devices, setDevices] = React.useState([]);
   const [checkBoxSelection, setCheckBoxSelection] = React.useState({
-    deviceChecked : []
+    deviceChecked: []
   })
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [openModal, setOpenModal] = React.useState(false)
 
   const checkBoxHandler = (deviceId) => {
     setCheckBoxSelection((prevState) => {
       if (prevState.deviceChecked.includes(deviceId)) {
         return ({
-          deviceChecked : prevState.deviceChecked.filter((id)=>id !== deviceId)
+          deviceChecked: prevState.deviceChecked.filter((id) => id !== deviceId)
         })
       } else {
-        return({
-          deviceChecked : [...prevState.deviceChecked , deviceId ]
+        return ({
+          deviceChecked: [...prevState.deviceChecked, deviceId]
         })
       }
     });
@@ -40,39 +41,46 @@ export default function Content() {
   }
 
 
-
   const loadScript = async () => {
     try {
       const response = await fetchDevices();
       console.log(response);
       setDevices(response);
-      console.log(devices);
       const script = document.createElement("script");
       script.src = `js/content.js`;
       script.async = true;
-
       document.body.appendChild(script);
     } catch (error) {
       console.error('Error loading script:', error);
     }
   };
 
+  const reloadDevices = async () => {
+    try {
+      const response = await fetchDevices();
+      setDevices(response);
+    } catch (error) {
+      console.error('Error reloading devices:', error);
+    }
+  };
+
   useEffect(() => {
     loadScript();
-  }, []);
+  }
+    , []);
+
+  function handleOpenModal() {
+    setOpenModal(true);
+  }
+
+  function handleCloseModal() {
+    setOpenModal(false);
+  }
 
   return (
     <>
-      <div className="modal fade" id="modal-default">
-        <div className="modal-dialog modal-l">
-          <div className="modal-content">
 
-            <div>
-              <Forms addDevice={loadScript} />
-            </div>
-          </div>
-        </div>
-      </div>
+      <Modal openModal={openModal} closeModal={handleCloseModal} fetchDevices={reloadDevices}></Modal>
 
       <div className="content-wrapper">
         <section className="content-header">
@@ -85,7 +93,7 @@ export default function Content() {
                 <ol class="breadcrumb float-sm-right">
                   <button type="button" class="mr-3 btn btn-secondary" data-toggle="modal" data-target="">
                     Connect</button>
-                    <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modal-default">
+                  <button type="button" class="btn btn-secondary" onClick={handleOpenModal}>
                     Add Device</button>
                 </ol>
               </div>
@@ -117,15 +125,15 @@ export default function Content() {
                         {devices.map(device => (
                           <tr key={device.deviceId}>
                             <td>
-                            <div className="custom-control custom-checkbox">
-                              <input
-                               className="custom-control-input" 
-                               type="checkbox" 
-                               id={`customCheckbox${device.deviceId}`} 
-                               defaultValue="option1"
-                               onChange={()=>checkBoxHandler(device.deviceId)} />
-                              <label htmlFor={`customCheckbox${device.deviceId}`} className="custom-control-label"></label>
-                            </div>
+                              <div className="custom-control custom-checkbox">
+                                <input
+                                  className="custom-control-input"
+                                  type="checkbox"
+                                  id={`customCheckbox${device.deviceId}`}
+                                  defaultValue="option1"
+                                  onChange={() => checkBoxHandler(device.deviceId)} />
+                                <label htmlFor={`customCheckbox${device.deviceId}`} className="custom-control-label"></label>
+                              </div>
                             </td>
                             <td>{device.deviceName}</td>
                             <td>{device.hardwareModel || 'Not Available'}</td>
