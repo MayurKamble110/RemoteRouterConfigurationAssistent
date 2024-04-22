@@ -31,6 +31,8 @@ import java.rmi.ServerError;
 import java.rmi.ServerException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -50,6 +52,7 @@ public class RouterApiService {
 
     @Autowired
     DeviceInterfaceRepository deviceInterfaceRepository;
+
     public boolean connectToRouter(RouterAccessDetails accessDetails) {
         String username = accessDetails.getUsername();
         String password = accessDetails.getPassword();
@@ -69,7 +72,8 @@ public class RouterApiService {
         return true;
     }
 
-    public String executeCommandOnRouter(CommandRequest commandRequest) throws ResourceAccessException,JsonProcessingException,BadRequestException{
+    public String executeCommandOnRouter(CommandRequest commandRequest)
+                    throws ResourceAccessException, JsonProcessingException, BadRequestException {
         StringBuilder output = new StringBuilder();
         output.append("!\n" +
                 "! Last configuration change at 22:31:52 UTC Wed Apr 17 2024 by admin\n" +
@@ -300,8 +304,7 @@ public class RouterApiService {
         return "FAILED TO DISCONNECT FROM ROUTER";
     }
 
-    public void addNewNetworkDevice(NewDevice newDevice)
-    {
+    public void addNewNetworkDevice(NewDevice newDevice) {
         NetworkDeviceDao dao = NetworkDeviceDao.builder()
                         .deviceName(newDevice.getDeviceName())
                         .ipAddress(newDevice.getIpAddress())
@@ -314,14 +317,29 @@ public class RouterApiService {
 
     }
 
-    public List<NetworkDeviceDao> getAllNetworkDevices()
-    {
+    public List<NetworkDeviceDao> getAllNetworkDevices() {
         return networkDeviceRepository.findAll();
     }
 
     public List<DeviceInterfaceDao> getInterfacesByDeviceId(long deviceId) {
         List<DeviceInterfaceDao> interfaces = new ArrayList<>();
-        return deviceInterfaceRepository.getInterfaceBySortedOrder(deviceId);
+        List<DeviceInterfaceDao> in = deviceInterfaceRepository.findAll();
+        for (DeviceInterfaceDao iface : in) {
+            if (iface.getNetworkDeviceDao().getDeviceId() == deviceId)
+                interfaces.add(iface);
+        }
+        Collections.sort(interfaces, new Comparator<DeviceInterfaceDao>() {
+            @Override
+            public int compare(DeviceInterfaceDao d1, DeviceInterfaceDao d2) {
+                String[] parts1 = d1.getInterfaceName().split("/");
+                String[] parts2 = d2.getInterfaceName().split("/");
+                int num1 = Integer.parseInt(parts1[1]);
+                int num2 = Integer.parseInt(parts2[1]);
+                return Integer.compare(num1, num2);
+            }
+        });
+        return interfaces;
+
     }
 
     public String analyseRouter(Long deviceId) throws ResourceAccessException, BadRequestException {
@@ -329,16 +347,17 @@ public class RouterApiService {
         return rawOutput.replaceAll("\\*\\*(.*?)\\*\\*", "<b>$1</b>");
     }
 
-    public Map<String, CpuProcessHistoryDto> getCpuProcessHistory(Long deviceId) throws JsonProcessingException, BadRequestException {
+    public Map<String, CpuProcessHistoryDto> getCpuProcessHistory(Long deviceId)
+                    throws JsonProcessingException, BadRequestException {
         Optional<NetworkDeviceDao> networkDeviceDao = networkDeviceRepository.findById(deviceId);
 
-        if(networkDeviceDao.isPresent())
-        {
+        if (networkDeviceDao.isPresent()) {
             String cpuProcessHistory = networkDeviceDao.get().getParsedCpuProcessesHistory();
-            if(cpuProcessHistory == null)
+            if (cpuProcessHistory == null)
                 throw new ResourceAccessException("CPU history content is null.");
             ObjectMapper objectMapper = new ObjectMapper();
-            Map<String, CpuProcessHistoryDto> cpuDataMap = objectMapper.readValue(cpuProcessHistory, Map.class);
+            Map<String, CpuProcessHistoryDto> cpuDataMap =
+                            objectMapper.readValue(cpuProcessHistory, Map.class);
             System.out.println(cpuDataMap);
 
             return cpuDataMap;
