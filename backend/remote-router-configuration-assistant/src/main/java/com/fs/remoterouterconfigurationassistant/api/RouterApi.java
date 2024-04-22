@@ -116,7 +116,6 @@ public class RouterApi {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.NO_CONTENT);
         }
     }
-
     @GetMapping(path = "/{deviceId}/interfaces/count")
     public int getInterfacesCount(@PathVariable Long deviceId)
     {
@@ -134,7 +133,6 @@ public class RouterApi {
     {
         return deviceInterfaceRepository.getDownInterfaceCount(deviceId);
     }
-
 
     @GetMapping(path = "/{deviceId}/count-access-mode")
     public List<Integer> getCountOfAccessMode(@PathVariable Long deviceId)
@@ -155,6 +153,14 @@ public class RouterApi {
         in.add(countTrunk);
         return in;
     }
+
+
+//    @PostMapping("/test")
+//    public String test()
+//    {
+//        service.addInterfacesToDatabase("",);
+//        return "Hi";
+//    }
 
     @PostMapping("/test/{id}")
     public void test(@PathVariable Long id) {
