@@ -93,7 +93,7 @@ export default function Content() {
                 <ol class="breadcrumb float-sm-right">
                   <button type="button" class="mr-3 btn btn-secondary" data-toggle="modal" data-target="">
                     Connect</button>
-                  <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modal-default">
+                  <button type="button" class="btn btn-secondary" onClick={handleOpenModal}>
                     Add Device</button>
                 </ol>
               </div>

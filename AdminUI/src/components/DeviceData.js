@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import Chart from 'chart.js/auto';
 import { useNavigate } from 'react-router-dom';
 import Loader from './Spinner';
+import ChatBotModal from './ChatBotModal';
 
 
 export default function DeviceData() {
@@ -98,14 +99,11 @@ export default function DeviceData() {
     navigate("/content");
   }
 
-  function ImageClickHandler() {
-    console.log("Hello")
-  }
   return (
     <>
       <div className="content-wrapper">
         {/* Content Header (Page header) */}
-        <section className="content-header">
+        <section className="content-header" >
           <div className="container-fluid">
             <div>
               <img src="/imgs/arrow.png" style={{ width: '30px', height: '20px' }} onClick={handleBackButton}></img>
@@ -116,14 +114,17 @@ export default function DeviceData() {
               </div>
               <div className="col-sm-6">
                 <div className="breadcrumb float-sm-right">
-                  {/* <button onClick={getAnalyseData} type="button" className="mr-2 btn btn-secondary">Analyse Data</button> */}
-                  <img onClick={ImageClickHandler} src="/imgs/BOT_logo.jpg" alt="BOT Logo" className="mr-3 brand-image img-circle elevation-3" style={{ height: '40px', width: '40px', opacity: '.9' }} />
+                  <img src="/imgs/BOT_logo.jpg" alt="BOT Logo" className="mr-3 brand-image img-circle elevation-3" style={{ height: '40px', width: '40px', opacity: '.9' }} data-toggle="modal" data-target="#modal-chatBot" />
+
                   <button onClick={getAnalyseData} type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modal-default">
                     Analyse Data</button>
                 </div>
               </div>
             </div>
           </div>{/* /.container-fluid */}
+
+          <ChatBotModal></ChatBotModal>
+
 
           <div className="modal fade" id="modal-default">
             <div className="modal-dialog">
@@ -138,11 +139,8 @@ export default function DeviceData() {
                   {analyseInfo && <div dangerouslySetInnerHTML={{ __html: analyseInfo }} />}
                   {!analyseInfo && <Loader ></Loader>}
                 </div>
-
               </div>
-              {/* /.modal-content */}
             </div>
-            {/* /.modal-dialog */}
           </div>
 
 
