@@ -111,7 +111,7 @@ export default function DeviceData() {
         <section className="content-header" >
           <div className="container-fluid">
             <div>
-              <img src="/imgs/arrow.png" style={{ width: '30px', height: '20px' }} onClick={handleBackButton}></img>
+              <ion-icon name="arrow-back" onClick={handleBackButton} style={{ height: '30px', width: '30px' }}></ion-icon>
             </div>
             <div className="row mb-2">
               <div className="col-sm-6">
