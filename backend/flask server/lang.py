@@ -20,7 +20,9 @@ def load_message_history(username, device_id, message_history, message):
                                          "Given is the configuration logs of my router device.")
         message_history.add_ai_message("OK")
     else:
-        print("no router logs")
+        message_history.add_user_message("Hi")
+        message_history.add_ai_message("No information related router and its state is provided")
+
     messages = get_message_history(username=username, device_id=device_id)
     for m in messages:
         message_history.add_user_message(m[0])
@@ -30,7 +32,7 @@ def load_message_history(username, device_id, message_history, message):
 
 
 chat = ChatGoogleGenerativeAI(model='gemini-pro', convert_system_message_to_human=True,
-                              temperature=0.1, google_api_key=os.getenv('GOOGLE_KEY'))
+                              temperature=0.5, google_api_key=os.getenv('GOOGLE_KEY'))
 
 prompt = ChatPromptTemplate.from_messages(
     [
