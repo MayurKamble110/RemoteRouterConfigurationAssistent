@@ -45,4 +45,7 @@ public class DeviceInterfaceDao {
     @Column(name = "raw_logs",length = 5000)
     private String rawLogs;
 
+    @Column(name ="access_mode")
+    private String mode;
+
 }

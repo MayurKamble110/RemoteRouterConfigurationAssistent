@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import com.fs.remoterouterconfigurationassistant.api.model.CommandRequest;
 import com.fs.remoterouterconfigurationassistant.databases.DeviceInterfaceRepositoryService;
 import com.fs.remoterouterconfigurationassistant.databases.NetworkDeviceRepositoryService;
+import com.fs.remoterouterconfigurationassistant.databases.ShowAccessModeRepository;
+import com.fs.remoterouterconfigurationassistant.databases.ShowAccessModeRepositoryService;
 import com.fs.remoterouterconfigurationassistant.databases.ShowInventoryRepositoryService;
 import com.fs.remoterouterconfigurationassistant.databases.ShowVersionRepositoryService;
 import org.springframework.web.client.ResourceAccessException;
@@ -26,6 +28,9 @@ public class RouterCommandInterpreter {
     @Autowired
     ShowInventoryRepositoryService showInventoryRepositoryService;
 
+    @Autowired
+    ShowAccessModeRepositoryService showAccessModeRepositoryService;
+
     public void processor(StringBuilder response, CommandRequest commandRequest) throws BadRequestException, JsonParseException, ResourceAccessException {
         switch (commandRequest.getCommand()) {
             case "show interface":
@@ -42,6 +47,8 @@ public class RouterCommandInterpreter {
             case "show inventory":
                 showInventoryRepositoryService.saveHardwareDataToDatabase(response.toString(), commandRequest.getDeviceId());
                 break;
+            case "show running config":
+                showAccessModeRepositoryService.addAccessModeToDatabase(response.toString(), commandRequest.getDeviceId());
             default:
                 System.out.println("Invalid command......");
         }

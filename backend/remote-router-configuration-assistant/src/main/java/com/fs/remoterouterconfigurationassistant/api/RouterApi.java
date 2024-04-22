@@ -1,6 +1,8 @@
 package com.fs.remoterouterconfigurationassistant.api;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import com.fs.remoterouterconfigurationassistant.databases.NetworkDeviceRepository;
@@ -110,7 +112,7 @@ public class RouterApi {
         }
     }
 
-<<<<<<< HEAD
+
     @GetMapping(path = "/{deviceId}/interfaces/count")
     public int getInterfacesCount(@PathVariable Long deviceId)
     {
@@ -129,13 +131,34 @@ public class RouterApi {
         return deviceInterfaceRepository.getDownInterfaceCount(deviceId);
     }
 
+    @GetMapping(path = "/{deviceId}/count-access-mode")
+    public List<Integer> getCountOfAccessMode(@PathVariable Long deviceId)
+    {
+        List<Integer> in = new ArrayList<>();
+        Integer countAccess =0;
+        Integer countTrunk =0;
+        List<DeviceInterfaceDao> deviceInterfaceDaoList = routerApiService.getInterfacesByDeviceId(deviceId);
+        for(DeviceInterfaceDao deviceInterfaceDao: deviceInterfaceDaoList)
+        {
+           if(Objects.equals(deviceInterfaceDao.getMode(), "access"))
+               countAccess++;
+           else
+               countTrunk ++;
+
+        }
+        in.add(countAccess);
+        in.add(countTrunk);
+        return in;
+    }
+
+
 //    @PostMapping("/test")
 //    public String test()
 //    {
 //        service.addInterfacesToDatabase("",);
 //        return "Hi";
 //    }
-=======
+
     @PostMapping("/test/{id}")
     public void test(@PathVariable Long id) {
         String output = """                                               
@@ -525,6 +548,6 @@ public class RouterApi {
             networkDeviceRepository.save(networkDeviceDao.get());
         }
     }
->>>>>>> 2805d91 (add user modal updated)
+
 
 }
