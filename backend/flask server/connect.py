@@ -18,22 +18,22 @@ connection = psycopg2.connect(
 cursor = connection.cursor()
 
 
-def save_message(username, human_message, ai_message):
+def save_message(username, human_message, ai_message, device_id):
     try:
-        query = "INSERT INTO message_history (username,human_message,ai_message) VALUES (%s,%s,%s)"
-        data = (username, human_message, ai_message)
+        query = "INSERT INTO message_history (username,human_message,ai_message,device_id) VALUES (%s,%s,%s,%s)"
+        data = (username, human_message, ai_message, device_id)
         cursor.execute(query, data)
         connection.commit()
     except Exception as e:
         logging.error(f"save message function {type(e)}")
 
 
-def get_message_history(username):
+def get_message_history(username, device_id):
     try:
-        prune_message_history(username)
-        query = ("SELECT human_message, ai_message FROM message_history WHERE username = %s "
+        prune_message_history(username, device_id)
+        query = ("SELECT human_message,ai_message FROM message_history WHERE username = %s AND device_id = %s "
                  "ORDER BY id")
-        cursor.execute(query, (username,))
+        cursor.execute(query, (username, device_id))
         message_history = cursor.fetchall()
         return message_history
     except Exception as e:
@@ -64,12 +64,12 @@ def get_raw_router_logs(device_id):
         logging.error(f"get_router_logs() {type(e)}")
 
 
-def prune_message_history(username):
+def prune_message_history(username, device_id):
     try:
-        query = ("DELETE FROM message_history WHERE username = %s AND id NOT IN "
-                 "( SELECT id FROM message_history WHERE username = %s "
+        query = ("DELETE FROM message_history WHERE device_id = %s AND id NOT IN "
+                 "( SELECT id FROM message_history WHERE username = %s AND device_id = %s "
                  " ORDER BY id DESC LIMIT 3 )")
-        cursor.execute(query, (username, username))
+        cursor.execute(query, (device_id, username, device_id))
         connection.commit()
     except Exception as e:
         logging.error(f"prune_message_history() {type(e)}")

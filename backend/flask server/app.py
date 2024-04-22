@@ -20,7 +20,7 @@ def ask_chat_bot():
     data = request.get_json()
     text = data['text']
     username = data['username']
-    device_id = data['device_id']
+    device_id = data['deviceId']
     try:
         message_history = ChatMessageHistory()
         message_history = load_message_history(data['username'],
@@ -29,7 +29,7 @@ def ask_chat_bot():
                                                message=data['text'])
         response = chat_with_chain(text, message_history=message_history)
         cleaned_response = remove_special_characters(response)
-        save_message(username=username, human_message=text, ai_message=cleaned_response)
+        save_message(username=username, human_message=text, ai_message=cleaned_response, device_id=device_id)
         return cleaned_response
     except KeyError:
         return "Key not found"
