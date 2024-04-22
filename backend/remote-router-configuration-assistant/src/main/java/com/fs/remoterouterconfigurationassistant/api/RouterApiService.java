@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fs.remoterouterconfigurationassistant.RouterAccessDetails;
 import com.fs.remoterouterconfigurationassistant.api.model.CommandRequest;
 import com.fs.remoterouterconfigurationassistant.api.model.CpuProcessHistoryDto;
+import com.fs.remoterouterconfigurationassistant.api.model.InterfaceData;
 import com.fs.remoterouterconfigurationassistant.api.model.NewDevice;
 import com.fs.remoterouterconfigurationassistant.api.routerCommands.RouterCommandInterpreter;
 import com.fs.remoterouterconfigurationassistant.databases.DeviceInterfaceRepository;
@@ -321,7 +322,7 @@ public class RouterApiService {
         return networkDeviceRepository.findAll();
     }
 
-    public List<DeviceInterfaceDao> getInterfacesByDeviceId(long deviceId) {
+    public InterfaceData getInterfacesByDeviceId(long deviceId) {
         List<DeviceInterfaceDao> interfaces = new ArrayList<>();
         List<DeviceInterfaceDao> in = deviceInterfaceRepository.findAll();
         for (DeviceInterfaceDao iface : in) {
@@ -338,7 +339,14 @@ public class RouterApiService {
                 return Integer.compare(num1, num2);
             }
         });
-        return interfaces;
+        InterfaceData interfaceData = new InterfaceData();
+        interfaceData.setInterfaces(interfaces);
+        int upInterfaceCount = deviceInterfaceRepository.getUpInterfaceCount(deviceId);
+        int downInterfaceCount = deviceInterfaceRepository.getDownInterfaceCount(deviceId);
+
+        interfaceData.setDownInterfaceCount(downInterfaceCount);
+        interfaceData.setUpInterfaceCount(upInterfaceCount);
+        return interfaceData;
 
     }
 

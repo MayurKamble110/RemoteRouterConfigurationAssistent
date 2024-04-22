@@ -1,81 +1,41 @@
 package com.fs.remoterouterconfigurationassistant.api.model;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fs.remoterouterconfigurationassistant.databases.entities.DeviceInterfaceDao;
+
 public class InterfaceData {
-    private String name;
-    private String ipAddress;
-    private String subnetMask;
-    private String mtu;
-    private String reliability;
-    private String txLoad;
-    private String rxLoad;
 
-    public String getName() {
-        return name;
+    @JsonProperty("up_interface_count")
+    int upInterfaceCount;
+    @JsonProperty("down_interface_count")
+    int downInterfaceCount;
+
+    List<DeviceInterfaceDao> interfaces;
+
+    public int getUpInterfaceCount() {
+        return upInterfaceCount;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUpInterfaceCount(int upInterfaceCount) {
+        this.upInterfaceCount = upInterfaceCount;
     }
 
-    public String getIpAddress() {
-        return ipAddress;
+    public int getDownInterfaceCount() {
+        return downInterfaceCount;
     }
 
-    public void setIpAddress(String ipAddress) {
-        this.ipAddress = ipAddress;
+    public void setDownInterfaceCount(int downInterfaceCount) {
+        this.downInterfaceCount = downInterfaceCount;
     }
 
-    public String getSubnetMask() {
-        return subnetMask;
+    public List<DeviceInterfaceDao> getInterfaces() {
+        return interfaces;
     }
 
-    public void setSubnetMask(String subnetMask) {
-        this.subnetMask = subnetMask;
-    }
-
-    public String getMtu() {
-        return mtu;
-    }
-
-    public void setMtu(String mtu) {
-        this.mtu = mtu;
-    }
-
-    public String getReliability() {
-        return reliability;
-    }
-
-    public void setReliability(String reliability) {
-        this.reliability = reliability;
-    }
-
-    public String getTxLoad() {
-        return txLoad;
-    }
-
-    public void setTxLoad(String txLoad) {
-        this.txLoad = txLoad;
-    }
-
-    public String getRxLoad() {
-        return rxLoad;
-    }
-
-    public void setRxLoad(String rxLoad) {
-        this.rxLoad = rxLoad;
-    }
-
-    @Override
-    public String toString() {
-        return "InterfaceData{" +
-                "name='" + name + '\'' +
-                ", ipAddress='" + ipAddress + '\'' +
-                ", subnetMask='" + subnetMask + '\'' +
-                ", mtu='" + mtu + '\'' +
-                ", reliability='" + reliability + '\'' +
-                ", txLoad='" + txLoad + '\'' +
-                ", rxLoad='" + rxLoad + '\'' +
-                '}';
+    public void setInterfaces(List<DeviceInterfaceDao> interfaces) {
+        this.interfaces = interfaces;
     }
 }
 

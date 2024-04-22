@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fs.remoterouterconfigurationassistant.RouterAccessDetails;
 import com.fs.remoterouterconfigurationassistant.api.model.CommandRequest;
+import com.fs.remoterouterconfigurationassistant.api.model.InterfaceData;
 import com.fs.remoterouterconfigurationassistant.api.model.NewDevice;
 import com.fs.remoterouterconfigurationassistant.databases.DeviceInterfaceRepository;
 import com.fs.remoterouterconfigurationassistant.databases.ShowInterfaceRepositoryService;
@@ -83,9 +84,9 @@ public class RouterApi {
     }
 
     @GetMapping(path = "/{deviceId}/interfaces")
-    public List<DeviceInterfaceDao> getInterfaceData(@PathVariable Long deviceId){
-        List<DeviceInterfaceDao> deviceInterfaceDaoList = routerApiService.getInterfacesByDeviceId(deviceId);
-        return deviceInterfaceDaoList;
+    public InterfaceData getInterfaceData(@PathVariable Long deviceId){
+        InterfaceData  interfaceData = routerApiService.getInterfacesByDeviceId(deviceId);
+        return interfaceData;
     }
 
     @GetMapping(path = "/{deviceId}/analyse")
