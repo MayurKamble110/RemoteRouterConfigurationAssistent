@@ -16,6 +16,7 @@ export default function DeviceData() {
   const navigate = useNavigate();
   const chartRefs = useRef([null, null, null, null]);
   const [analyseInfo, setAnalyseInfo] = useState('');
+  const [interfaceStatus , setInterfaceStatus] = useState({});
 
   const getAnalyseData = async () => {
     try {
@@ -41,7 +42,11 @@ export default function DeviceData() {
         }
         const responseData = await response.json();
         console.log(responseData)
-        setInterfaceData(responseData);
+        setInterfaceData(responseData.interfaces);
+        setInterfaceStatus({
+          up : responseData.up_interface_count,
+          down : responseData.down_interface_count
+        })
       } catch (error) {
         console.error('Error fetching chart data:', error);
       }
@@ -154,7 +159,7 @@ export default function DeviceData() {
                   <div className="info-box-content">
                     <span className="info-box-text">Total Interfaces</span>
                     <span className="info-box-number">
-                      100
+                     { interfaceStatus.up + interfaceStatus.down}
                     </span>
                   </div>
                 </div>
@@ -164,7 +169,7 @@ export default function DeviceData() {
                   <span className="info-box-icon bg-success elevation-1"><ion-icon name="caret-up-outline"></ion-icon> </span>
                   <div className="info-box-content">
                     <span className="info-box-text">UP Interfaces</span>
-                    <span className="info-box-number">41</span>
+                    <span className="info-box-number">{interfaceStatus.up}</span>
                   </div>
                 </div>
               </div>
@@ -174,7 +179,7 @@ export default function DeviceData() {
                   <span className="info-box-icon bg-danger elevation-1"><ion-icon name="caret-down-outline"></ion-icon></span>
                   <div className="info-box-content">
                     <span className="info-box-text">Down Interfaces</span>
-                    <span className="info-box-number">59</span>
+                    <span className="info-box-number">{interfaceStatus.down}</span>
                   </div>
                 </div>
               </div>

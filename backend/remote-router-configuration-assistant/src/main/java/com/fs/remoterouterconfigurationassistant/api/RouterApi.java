@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fs.remoterouterconfigurationassistant.RouterAccessDetails;
 import com.fs.remoterouterconfigurationassistant.api.model.CommandRequest;
+import com.fs.remoterouterconfigurationassistant.api.model.InterfaceData;
 import com.fs.remoterouterconfigurationassistant.api.model.NewDevice;
 import com.fs.remoterouterconfigurationassistant.databases.DeviceInterfaceRepository;
 import com.fs.remoterouterconfigurationassistant.databases.ShowInterfaceRepositoryService;
@@ -83,9 +84,9 @@ public class RouterApi {
     }
 
     @GetMapping(path = "/{deviceId}/interfaces")
-    public List<DeviceInterfaceDao> getInterfaceData(@PathVariable Long deviceId){
-        List<DeviceInterfaceDao> deviceInterfaceDaoList = routerApiService.getInterfacesByDeviceId(deviceId);
-        return deviceInterfaceDaoList;
+    public InterfaceData getInterfaceData(@PathVariable Long deviceId){
+        InterfaceData  interfaceData = routerApiService.getInterfacesByDeviceId(deviceId);
+        return interfaceData;
     }
 
     @GetMapping(path = "/{deviceId}/analyse")
@@ -112,7 +113,10 @@ public class RouterApi {
         }
     }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 88c5534 (Updated APIs to get Up and Down Interface and are shown on UI)
     @GetMapping(path = "/{deviceId}/interfaces/count")
     public int getInterfacesCount(@PathVariable Long deviceId)
     {
@@ -158,7 +162,10 @@ public class RouterApi {
 //        service.addInterfacesToDatabase("",);
 //        return "Hi";
 //    }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 88c5534 (Updated APIs to get Up and Down Interface and are shown on UI)
     @PostMapping("/test/{id}")
     public void test(@PathVariable Long id) {
         String output = """                                               
@@ -548,6 +555,9 @@ public class RouterApi {
             networkDeviceRepository.save(networkDeviceDao.get());
         }
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 88c5534 (Updated APIs to get Up and Down Interface and are shown on UI)
 
 }
