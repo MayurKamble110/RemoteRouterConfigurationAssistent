@@ -113,10 +113,6 @@ public class RouterApi {
         }
     }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 88c5534 (Updated APIs to get Up and Down Interface and are shown on UI)
     @GetMapping(path = "/{deviceId}/interfaces/count")
     public int getInterfacesCount(@PathVariable Long deviceId)
     {
@@ -141,8 +137,8 @@ public class RouterApi {
         List<Integer> in = new ArrayList<>();
         Integer countAccess =0;
         Integer countTrunk =0;
-        List<DeviceInterfaceDao> deviceInterfaceDaoList = routerApiService.getInterfacesByDeviceId(deviceId);
-        for(DeviceInterfaceDao deviceInterfaceDao: deviceInterfaceDaoList)
+        InterfaceData interfaceData = routerApiService.getInterfacesByDeviceId(deviceId);
+        for(DeviceInterfaceDao deviceInterfaceDao: interfaceData.getInterfaces())
         {
            if(Objects.equals(deviceInterfaceDao.getMode(), "access"))
                countAccess++;
@@ -162,10 +158,7 @@ public class RouterApi {
 //        service.addInterfacesToDatabase("",);
 //        return "Hi";
 //    }
-<<<<<<< HEAD
 
-=======
->>>>>>> 88c5534 (Updated APIs to get Up and Down Interface and are shown on UI)
     @PostMapping("/test/{id}")
     public void test(@PathVariable Long id) {
         String output = """                                               
@@ -555,9 +548,5 @@ public class RouterApi {
             networkDeviceRepository.save(networkDeviceDao.get());
         }
     }
-<<<<<<< HEAD
-
-=======
->>>>>>> 88c5534 (Updated APIs to get Up and Down Interface and are shown on UI)
 
 }
