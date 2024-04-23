@@ -1,5 +1,6 @@
 package com.fs.remoterouterconfigurationassistant.databases;
 
+import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,8 @@ public class ShowInterfaceRepositoryService {
 
 
 
-    public void addInterfacesToDatabase(String responce, CommandRequest commandRequest) {
+    public String addInterfacesToDatabase(String responce, CommandRequest commandRequest)
+                    throws BadRequestException {
 
         String[] interfaces = ShowInterfaces.parseData(responce);
 
@@ -27,6 +29,9 @@ public class ShowInterfaceRepositoryService {
                 RouterInterfaceResponceDto responceDto =
                                 FlaskServer.getRouterInterfaceResponceDto(new FlaskServerApiRequestBody(data,
                                                 "Give a JSON  object including name,status,ip_address,description and hardware. all these fields should be of string type."));
+                if(responceDto==null)
+                    return "Server is not responding...";
+
                 System.out.println("Length : " + data.length());
                 ShowInterfacesDao dao = ShowInterfacesDao.builder()
                                 .status(responceDto.getStatus())
@@ -41,5 +46,7 @@ public class ShowInterfaceRepositoryService {
 
             }
         }
+
+        return "";
     }
 }

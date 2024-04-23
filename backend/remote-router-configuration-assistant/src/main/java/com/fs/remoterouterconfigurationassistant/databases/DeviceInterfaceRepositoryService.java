@@ -3,10 +3,13 @@ package com.fs.remoterouterconfigurationassistant.databases;
 import java.util.List;
 import java.util.Optional;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fs.remoterouterconfigurationassistant.databases.NetworkDeviceRepository;
 
+import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.ResourceAccessException;
 
 import com.fs.remoterouterconfigurationassistant.api.model.FlaskServerApiRequestBody;
 import com.fs.remoterouterconfigurationassistant.api.model.RouterInterfaceResponceDto;
@@ -22,7 +25,8 @@ public class DeviceInterfaceRepositoryService {
     @Autowired
     NetworkDeviceRepository networkDeviceRepository;
 
-    public void saveDeviceInterfaceDataToDatabase(String responce, Long deviceid) {
+    public void saveDeviceInterfaceDataToDatabase(String responce, Long deviceid)
+                    throws  BadRequestException {
         String[] interfaces = ShowInterfaces.parseData(responce);
         Optional<NetworkDeviceDao> networkDeviceDao = networkDeviceRepository.findById(deviceid);
         List<DeviceInterfaceDao> list =
@@ -34,7 +38,10 @@ public class DeviceInterfaceRepositoryService {
                                 FlaskServer.getRouterInterfaceResponceDto(new FlaskServerApiRequestBody(
                                                 data,
                                                 "Only give name,status,ip_address,description and hardware in JSON format it should be a single JSON object containing only given four fields. all these fields should be of string type."));
-                assert responceDto != null;
+
+                if(responceDto==null)
+                    throw new BadRequestException("Server is not responding...");
+
                 boolean status = responceDto.getStatus().equals("up");
 
                 if (list.isEmpty()) {
@@ -67,5 +74,7 @@ public class DeviceInterfaceRepositoryService {
             System.out.println("All interfaces for device " + networkDeviceDao.get()
                             .getDeviceName() + " are UPDATED successfully.");
         }
+
+
     }
 }

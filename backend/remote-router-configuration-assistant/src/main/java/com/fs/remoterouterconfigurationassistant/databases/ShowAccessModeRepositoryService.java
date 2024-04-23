@@ -5,8 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.ResourceAccessException;
 
 import com.fs.remoterouterconfigurationassistant.api.model.FlaskServerApiRequestBody;
 import com.fs.remoterouterconfigurationassistant.api.model.RouterInterfaceResponceDto;
@@ -35,6 +37,8 @@ public class  ShowAccessModeRepositoryService {
                 ShowAccessModeDto responceDto =
                         FlaskServer.getAccessMode(new FlaskServerApiRequestBody(data,
                                 "Give a JSON  object including interfaceName and accessMode. all these fields should be of string type."));
+                if(responceDto==null)
+                    return null;
                 System.out.println("Length : " + data.length());
                 String name = responceDto.getInterfaceName();
 
@@ -57,9 +61,12 @@ public class  ShowAccessModeRepositoryService {
 
 
 
-    public void addAccessModeToDatabase(String response, Long deviceId) {
+    public void addAccessModeToDatabase(String response, Long deviceId) throws BadRequestException {
 
         Map<String ,String> mp = listOfInterfaceAndAccessMode(response);
+        if(mp==null)
+            throw new ResourceAccessException("Server is not responding...");
+
         System.out.println(mp);
             List<DeviceInterfaceDao> in = deviceInterfaceRepository.findAll();
             for ( DeviceInterfaceDao iface : in) {
@@ -80,6 +87,7 @@ public class  ShowAccessModeRepositoryService {
                     deviceInterfaceRepository.save(dao);
                 }
             }
+
         }
 
     }
