@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonParseException;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fs.remoterouterconfigurationassistant.api.model.CommandRequest;
 import com.fs.remoterouterconfigurationassistant.databases.DeviceInterfaceRepositoryService;
 import com.fs.remoterouterconfigurationassistant.databases.NetworkDeviceRepositoryService;
@@ -31,27 +33,29 @@ public class RouterCommandInterpreter {
     @Autowired
     ShowAccessModeRepositoryService showAccessModeRepositoryService;
 
-    public void processor(StringBuilder response, CommandRequest commandRequest) throws BadRequestException, JsonParseException, ResourceAccessException {
+    public void processor(StringBuilder response, CommandRequest commandRequest)
+                    throws JsonProcessingException, ResourceAccessException, BadRequestException {
         switch (commandRequest.getCommand()) {
             case "show interface":
-                deviceInterfaceRepositoryService.saveDeviceInterfaceDataToDatabase(response.toString(),
+                 deviceInterfaceRepositoryService.saveDeviceInterfaceDataToDatabase(response.toString(),
                                 commandRequest.getDeviceId());
-                break;
+                 break;
             case "show version":
-                showVersionRepositoryService.addVersionDataToDatabase(response.toString(),
+                  showVersionRepositoryService.addVersionDataToDatabase(response.toString(),
                                 commandRequest.getDeviceId());
-                break;
+                  break;
             case "show processes cpu history":
                 networkDeviceRepositoryService.addCpuProcessesHistoryToDatabase(response.toString(),commandRequest.getDeviceId());
                 break;
             case "show inventory":
-                showInventoryRepositoryService.saveHardwareDataToDatabase(response.toString(), commandRequest.getDeviceId());
-                break;
+                 showInventoryRepositoryService.saveHardwareDataToDatabase(response.toString(), commandRequest.getDeviceId());
+                 break;
             case "show running config":
                 showAccessModeRepositoryService.addAccessModeToDatabase(response.toString(), commandRequest.getDeviceId());
                 break;
             default:
                 System.out.println("Invalid command......");
         }
+
     }
 }

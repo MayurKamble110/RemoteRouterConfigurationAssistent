@@ -20,8 +20,9 @@ public class FlaskServer {
 
     public static final String flaskServerApiEndpoint = "http://localhost:5000/ask-ai";
 
-    public static RouterInterfaceResponceDto getRouterInterfaceResponceDto(FlaskServerApiRequestBody body) {
-        body.setText(body.getText()+" Only give name,status,ip_address,description and hardware in JSON format it should be a single JSON object containing only given four fields. all these fields should be of string type.");
+    public static RouterInterfaceResponceDto getRouterInterfaceResponceDto(FlaskServerApiRequestBody body)
+                    throws  BadRequestException {
+        body.setText(body.getText()+body.getPrompt());
         ObjectMapper objectMapper = new ObjectMapper();
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -51,7 +52,7 @@ public class FlaskServer {
             }
 
         } catch (Exception e) {
-            System.out.println(e);
+            throw new BadRequestException("Server is not responding...");
         }
         System.out.println("Error...");
         return null;

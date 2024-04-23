@@ -1,5 +1,6 @@
 package com.fs.remoterouterconfigurationassistant.api;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -19,6 +20,7 @@ import com.fs.remoterouterconfigurationassistant.databases.DeviceInterfaceReposi
 import com.fs.remoterouterconfigurationassistant.databases.ShowInterfaceRepositoryService;
 import com.fs.remoterouterconfigurationassistant.databases.entities.DeviceInterfaceDao;
 import com.fs.remoterouterconfigurationassistant.databases.entities.NetworkDeviceDao;
+import com.jcraft.jsch.JSchException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.ResourceAccessException;
@@ -57,6 +59,8 @@ public class RouterApi {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY);
         }catch (ResourceAccessException e){
             return new ResponseEntity<>(e.getMessage(),HttpStatus.SERVICE_UNAVAILABLE);
+        } catch (JSchException | IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

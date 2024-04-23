@@ -1,7 +1,9 @@
 package com.fs.remoterouterconfigurationassistant.databases;
 
+import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.ResourceAccessException;
 
 import com.fs.remoterouterconfigurationassistant.api.model.FlaskServerApiRequestBody;
 import com.fs.remoterouterconfigurationassistant.api.model.RouterVersionResponseDto;
@@ -15,10 +17,14 @@ public class ShowVersionRepositoryService {
 
 
     public void addVersionDataToDatabase(String response, Long deviceId)
-    {
+                    throws ResourceAccessException {
         RouterVersionResponseDto routerVersionResponseDto=
         FlaskServer.getRouterVersionResponseDto(new FlaskServerApiRequestBody(response,
                 "Give a JSON  object including os_type, os_version and hardware_model. all these fields should be of string type."));
+
+        if(routerVersionResponseDto==null)
+            throw new ResourceAccessException("Server is not responding...");
+
         NetworkDeviceDao deviceDao = networkDeviceRepository.getReferenceById(deviceId);
         NetworkDeviceDao deviceDao1 = NetworkDeviceDao.builder()
                 .deviceId(deviceDao.getDeviceId())
@@ -34,5 +40,6 @@ public class ShowVersionRepositoryService {
                 .deviceType(deviceDao.getDeviceType())
                 .build();
         networkDeviceRepository.save(deviceDao1);
+
     }
 }

@@ -74,7 +74,7 @@ public class RouterApiService {
     }
 
     public String executeCommandOnRouter(CommandRequest commandRequest)
-                    throws ResourceAccessException, JsonProcessingException, BadRequestException {
+                    throws ResourceAccessException, IOException, JSchException {
         StringBuilder output = new StringBuilder();
         try {
             if (session != null && session.isConnected()) {
@@ -92,7 +92,7 @@ public class RouterApiService {
                 }
                 channel.disconnect();
 
-                routerCommandInterpreter.processor(output, commandRequest);
+               routerCommandInterpreter.processor(output, commandRequest);
 
             } else {
                 System.out.println("SSH session is not established.");
@@ -101,6 +101,7 @@ public class RouterApiService {
         } catch ( Exception e) {
             e.printStackTrace();
             output.append("Error executing command: ").append(e.getMessage());
+            throw e;
         }
 
         return output.toString();
