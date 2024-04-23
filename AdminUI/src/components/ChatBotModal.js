@@ -8,27 +8,50 @@ const botImg = <img src='/imgs/BOT_logo.jpg' className="direct-chat-img" />
 
 export default function ChatBotModal() {
 
-    const user = useSelector((state) => state.user.userName)
+    const username = useSelector((state) => state.user.userName)
+    const deviceId = useSelector((state) => state.device.deviceId);
     const ref = useRef();
-    const [input, setInput] = useState('');
+    const [userQuery, setUserQuery] = useState('');
     const [messages, setMessages] = useState([]);
 
+    const fetchResponse = async () => {
+        try {
+            const response = await fetch(`http://localhost:8080/api/routers/${deviceId}/chat-bot`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ deviceId, username, userQuery }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to add device');
+            }
+
+            const responseData = await response.text();
+            setMessages((prevMsgState) => {
+                const updatedMsgState = [...prevMsgState, responseData];
+                return updatedMsgState;
+            })
+            console.log(messages);
+        } catch (error) {
+            console.error('Error adding device:', error);
+        }
+    }
+
     function handleInputChange(e) {
-        setInput(e.target.value);
+        setUserQuery(e.target.value);
     }
 
     function handleUserRequest() {
         ref.current.value = '';
 
         setMessages((prevMsgState) => {
-            const updatedMsgState = [...prevMsgState, input];
+            const updatedMsgState = [...prevMsgState, userQuery];
             return updatedMsgState;
         })
 
-        setMessages((prevMsgState) => {
-            const updatedMsgState = [...prevMsgState, "Hello everyone I am InsightBot"];
-            return updatedMsgState;
-        })
+        fetchResponse();
     }
 
     function handleReset() {
@@ -67,7 +90,7 @@ export default function ChatBotModal() {
                                                         </div>
                                                     </div> : <div className="direct-chat-msg" key={index}>
                                                         <div className="direct-chat-infos clearfix">
-                                                            <span className="direct-chat-name float-right">{user}</span>
+                                                            <span className="direct-chat-name float-right">{username}</span>
                                                         </div>
                                                         {userImg}
                                                         <div className="direct-chat-text">
