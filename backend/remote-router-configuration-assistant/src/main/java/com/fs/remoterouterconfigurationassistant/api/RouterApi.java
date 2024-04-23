@@ -116,7 +116,6 @@ public class RouterApi {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.NO_CONTENT);
         }
     }
-
     @GetMapping(path = "/{deviceId}/interfaces/count")
     public int getInterfacesCount(@PathVariable Long deviceId)
     {
