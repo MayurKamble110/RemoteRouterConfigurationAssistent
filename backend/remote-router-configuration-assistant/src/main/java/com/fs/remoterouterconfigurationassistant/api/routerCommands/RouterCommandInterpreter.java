@@ -49,6 +49,7 @@ public class RouterCommandInterpreter {
                 break;
             case "show running config":
                 showAccessModeRepositoryService.addAccessModeToDatabase(response.toString(), commandRequest.getDeviceId());
+                break;
             default:
                 System.out.println("Invalid command......");
         }
