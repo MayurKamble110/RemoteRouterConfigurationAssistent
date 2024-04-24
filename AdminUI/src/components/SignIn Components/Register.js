@@ -11,6 +11,20 @@ export default function Register() {
     const submitHandler = async(event)=>{
         console.log(name);
         event.preventDefault();
+        console.log(emailID);
+        const emailRegex = /^[a-zA-Z0-9._-]+@gmail\.com$/;
+        if(!name || !emailID || !password){
+            NotifyErrorToast('Please enter all the fields');
+            return;
+        }
+        if (!emailRegex.test(emailID)) {
+            NotifyErrorToast('Invalid email format. Please use a Gmail address.');
+            return;
+        }
+        if(password.length <8){
+            NotifyErrorToast('Invalid password. Password length should be at least 8');
+            return;    
+        }
         try{
             const response = await fetch('http://localhost:8080/auth/create-user',{
                 method : 'POST',
@@ -56,7 +70,7 @@ export default function Register() {
                         <p className="login-box-msg">Register a new membership</p>
                         <form>
                             <div className="input-group mb-3">
-                                <input type="text" className="form-control" placeholder="Name" onChange={e=>setName(e.target.value)}/>
+                                <input required type="text" className="form-control" autoComplete="off" placeholder="Name" onChange={e=>setName(e.target.value)}/>
                                 <div className="input-group-append">
                                     <div className="input-group-text">
                                         <span className="fas fa-user" />
@@ -64,7 +78,7 @@ export default function Register() {
                                 </div>
                             </div>
                             <div className="input-group mb-3">
-                                <input type="email" className="form-control" placeholder="Email" onChange={e => setEmail(e.target.value)}/>
+                                <input required type="email" className="form-control" autoComplete="off" placeholder="Email" onChange={e => setEmail(e.target.value)}/>
                                 <div className="input-group-append">
                                     <div className="input-group-text">
                                         <span className="fas fa-envelope" />
@@ -72,7 +86,7 @@ export default function Register() {
                                 </div>
                             </div>
                             <div className="input-group mb-3">
-                                <input type="password" className="form-control" placeholder="Password" onChange={e => setPassword(e.target.value)} />
+                                <input required  type="password" className="form-control" autoComplete="off" placeholder="Password" onChange={e => setPassword(e.target.value)} />
                                 <div className="input-group-append">
                                     <div className="input-group-text">
                                         <span className="fas fa-lock" />

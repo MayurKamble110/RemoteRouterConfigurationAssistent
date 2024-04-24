@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate} from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Header from "./components/Header";
 import Home from "./components/Home";
@@ -13,44 +13,24 @@ import Register from './components/SignIn Components/Register';
 
 function App() {
   const userName = useSelector((state) => state.user.userName);
-  console.log(userName);
+  const auth  = userName ? true : false ;
   return (
+  
     <Router>
-      {!userName &&
-        <Routes>
-          <Route path="/" Component={LoginPage} />
-          <Route path="/register" Component={Register} />
-        </Routes>
-      }
-      {userName &&
-        <Routes>
-          <Route path="/content" Component={Content} />
-          <Route path="/device" Component={DeviceData} />
-          <Route path="/commands" Component={CommandsInfo} />
-        </Routes>
-      }
-      {userName && (
+      {auth &&
         <>
-          <Header />
-          <SideNav />
-          <Footer />
-        </>
-      )}
+          <Header></Header>
+          <SideNav></SideNav>
+          <Footer></Footer>
+        </>}
+      <Routes>
+        <Route path='/' Component={LoginPage} />
+        <Route path='/register' Component={Register} />
+        <Route path='/device' element={auth ? <DeviceData /> : <Navigate to="/" />} />
+        <Route path='/content' element={auth ? <Content /> : <Navigate to="/" />} />
+        <Route path='/commands' element={auth ? <CommandsInfo /> : <Navigate to="/" />} />
+      </Routes>
     </Router>
-
-    // <Router>
-    //   <Header />
-    //   <SideNav />
-    //   <Footer />
-    //   <Routes>
-    //     <Route path='/' Component={LoginPage}></Route>
-    //     <Route path="/register" Component={Register} />
-    //     <Route path="/content" Component={Content} />
-    //     <Route path="/device" Component={DeviceData} />
-    //    <Route path="/commands" Component={CommandsInfo} />
-    //   </Routes>
-    // </Router>
-
   );
 }
 

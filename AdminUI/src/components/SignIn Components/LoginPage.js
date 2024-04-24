@@ -56,7 +56,7 @@ export default function LoginPage() {
                         <p className="login-box-msg">Sign in to start your session</p>
                         <form action="../../index3.html" method="post">
                             <div className="input-group mb-3">
-                                <input type="email" className="form-control" placeholder="Email" onChange={e => setEmailID(e.target.value)} />
+                                <input type="email" className="form-control" placeholder="Email" autoComplete="off" onChange={e => setEmailID(e.target.value)} />
                                 <div className="input-group-append">
                                     <div className="input-group-text">
                                         <span className="fas fa-envelope" />
@@ -64,7 +64,7 @@ export default function LoginPage() {
                                 </div>
                             </div>
                             <div className="input-group mb-3">
-                                <input type="password" className="form-control" placeholder="Password" onChange={e => setPassword(e.target.value)} />
+                                <input type="password" className="form-control" placeholder="Password" autoComplete="off" onChange={e => setPassword(e.target.value)} />
                                 <div className="input-group-append">
                                     <div className="input-group-text">
                                         <span className="fas fa-lock" />
