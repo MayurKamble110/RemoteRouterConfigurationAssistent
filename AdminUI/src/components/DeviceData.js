@@ -187,8 +187,8 @@ export default function DeviceData() {
                 <div className="info-box mb-3">
                   <span className="info-box-icon bg-warning elevation-1"><i className="fas fa-users" /></span>
                   <div className="info-box-content">
-                    <span className="info-box-text">Money</span>
-                    <span className="info-box-number">2,000</span>
+                    <span className="info-box-text">Device IP</span>
+                    <span className="info-box-number">1.2.3.4</span>
                   </div>
                 </div>
               </div>

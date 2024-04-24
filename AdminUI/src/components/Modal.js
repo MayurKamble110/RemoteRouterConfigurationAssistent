@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { NotifyErrorToast } from "../data/ToastData";
 
 export default function Modal(props) {
     const initialFormValues = {
@@ -25,6 +26,12 @@ export default function Modal(props) {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        console.log(formData);
+        if(!formData.deviceName || !formData.ipAddress || !formData.username || !formData.password || !formData.enablePassword ) {
+            NotifyErrorToast('Please enter all the fields');
+            return;
+        }
+
         try {
             const response = await fetch('http://localhost:8080/api/routers', {
                 method: 'POST',
@@ -72,23 +79,23 @@ export default function Modal(props) {
                         <div className="popup-content">
                             <div className="form-group">
                                 <label>Device Name</label>
-                                <input type="text" className="form-control" placeholder="Enter device name" name="deviceName" value={formData.deviceName} onChange={handleChange} />
+                                <input type="text" className="form-control" placeholder="Enter device name" autoComplete="off" name="deviceName" value={formData.deviceName} onChange={handleChange} />
                             </div>
                             <div className="form-group">
                                 <label>IP Address</label>
-                                <input type="text" className="form-control" value={formData.ipAddress} placeholder="Enter IP Address" name="ipAddress" onChange={handleChange} />
+                                <input type="text" className="form-control" value={formData.ipAddress} placeholder="Enter IP Address" autoComplete="off" name="ipAddress" onChange={handleChange} />
                             </div>
                             <div className="form-group">
                                 <label>Username</label>
-                                <input type="text" className="form-control" name="username" value={formData.username} placeholder="Enter username" onChange={handleChange} />
+                                <input type="text" className="form-control" name="username" value={formData.username} placeholder="Enter username" autoComplete="off" onChange={handleChange} />
                             </div>
                             <div className="form-group">
                                 <label htmlFor="exampleInputPassword1">Login Password</label>
-                                <input type="password" className="form-control" name="password" value={formData.password} placeholder="Login Password" onChange={handleChange} />
+                                <input type="password" className="form-control" name="password" value={formData.password} placeholder="Login Password" autoComplete="off" onChange={handleChange} />
                             </div>
                             <div className="form-group">
                                 <label htmlFor="exampleInputPassword1">Enable Password</label>
-                                <input type="password" className="form-control" name="enablePassword" value={formData.enablePassword} placeholder="Enable Password" onChange={handleChange} />
+                                <input type="password" className="form-control" name="enablePassword" value={formData.enablePassword} placeholder="Enable Password" autoComplete="off" onChange={handleChange} />
                             </div>
                         </div>
                     </div>

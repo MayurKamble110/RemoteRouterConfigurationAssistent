@@ -75,6 +75,7 @@ export default function Content() {
 
   function handleCloseModal() {
     setOpenModal(false);
+    window.location.reload(); 
   }
 
   return (
