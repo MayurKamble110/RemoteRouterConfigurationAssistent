@@ -1,8 +1,15 @@
 // api.js
-
-export const fetchDevices = async () => {
+export const fetchDevices = async (jwtToken) => {  
     try {
-      const response = await fetch('http://localhost:8080/api/routers');
+      
+        const token = jwtToken;
+        const header = {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        };
+      const response = await fetch('http://localhost:8080/api/routers', {
+      headers: header
+    });
       if (!response.ok) {
         throw new Error('Failed to fetch data');
       }

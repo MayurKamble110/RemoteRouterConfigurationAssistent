@@ -8,6 +8,8 @@ import com.fs.remoterouterconfigurationassistant.api.model.CpuProcessHistoryDto;
 import com.fs.remoterouterconfigurationassistant.api.model.InterfaceData;
 import com.fs.remoterouterconfigurationassistant.api.model.NewDevice;
 import com.fs.remoterouterconfigurationassistant.api.routerCommands.RouterCommandInterpreter;
+import com.fs.remoterouterconfigurationassistant.auth.dao.UserRepository;
+import com.fs.remoterouterconfigurationassistant.auth.entities.User;
 import com.fs.remoterouterconfigurationassistant.databases.DeviceInterfaceRepository;
 import com.fs.remoterouterconfigurationassistant.databases.NetworkDeviceRepository;
 import com.fs.remoterouterconfigurationassistant.databases.NetworkDeviceRepositoryService;
@@ -20,8 +22,11 @@ import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 
+import org.apache.catalina.core.ApplicationContext;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.client.ResourceAccessException;
@@ -53,6 +58,9 @@ public class RouterApiService {
 
     @Autowired
     DeviceInterfaceRepository deviceInterfaceRepository;
+
+    @Autowired
+    UserRepository userRepository;
 
     public boolean connectToRouter(RouterAccessDetails accessDetails) {
         String username = accessDetails.getUsername();
@@ -119,12 +127,18 @@ public class RouterApiService {
     }
 
     public void addNewNetworkDevice(NewDevice newDevice) {
+        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        System.out.println(email);
+        User user = userRepository.getReferenceById(email);
+        System.out.println(user);
         NetworkDeviceDao dao = NetworkDeviceDao.builder()
                         .deviceName(newDevice.getDeviceName())
                         .ipAddress(newDevice.getIpAddress())
                         .username(newDevice.getUsername())
                         .password(newDevice.getPassword())
                         .enablePassword(newDevice.getEnablePassword())
+                        .user(user)
                         .build();
 
         networkDeviceRepositoryService.addNetworkDeviceToDatabase(dao);
@@ -132,7 +146,10 @@ public class RouterApiService {
     }
 
     public List<NetworkDeviceDao> getAllNetworkDevices() {
-        return networkDeviceRepository.findAll();
+        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        System.out.println(email);
+        return networkDeviceRepository.findAllRoutersByUserAccount(email);
     }
 
     public InterfaceData getInterfacesByDeviceId(long deviceId) {

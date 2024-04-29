@@ -59,7 +59,6 @@ public class FlaskServer {
     }
 
     public static RouterVersionResponseDto getRouterVersionResponseDto(FlaskServerApiRequestBody body) {
-
         body.setText(body.getText()+body.getPrompt());
         ObjectMapper objectMapper = new ObjectMapper();
         RestTemplate restTemplate = new RestTemplate();
@@ -96,7 +95,6 @@ public class FlaskServer {
     }
 
     public static ShowAccessModeDto getAccessMode(FlaskServerApiRequestBody body) {
-
         body.setText(body.getText()+body.getPrompt());
         ObjectMapper objectMapper = new ObjectMapper();
         RestTemplate restTemplate = new RestTemplate();
@@ -133,7 +131,6 @@ public class FlaskServer {
     }
 
     public static ShowInventoryDto getShowInventoryDto(FlaskServerApiRequestBody body) {
-
         body.setText(body.getText()+body.getPrompt());
         ObjectMapper objectMapper = new ObjectMapper();
         RestTemplate restTemplate = new RestTemplate();
@@ -173,11 +170,8 @@ public class FlaskServer {
         String ANALYSE_ROUTER_ENDPOINT = "http://localhost:5000/analyse-router";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-
         String requestBody = "{\"device_id\": \"" + deviceId + "\"}";
-
         HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, headers);
-
         RestTemplate restTemplate = new RestTemplate();
         try {
             ResponseEntity<String> responseEntity = restTemplate.postForEntity(
@@ -203,11 +197,8 @@ public class FlaskServer {
         String ANALYSE_ROUTER_ENDPOINT = "http://localhost:5000/analyse-interface";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-
         String requestBody = "{\"interface_id\": \"" + interfaceId + "\"}";
-
         HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, headers);
-
         RestTemplate restTemplate = new RestTemplate();
         try {
             ResponseEntity<String> responseEntity = restTemplate.postForEntity(

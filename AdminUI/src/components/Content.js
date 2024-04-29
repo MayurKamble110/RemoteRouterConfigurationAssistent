@@ -2,11 +2,10 @@
 import * as React from 'react';
 import { useEffect } from "react";
 import { fetchDevices } from '../api';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector} from 'react-redux';
 import { deviceActions } from '../Store';
 import { useNavigate } from 'react-router-dom'
 import Modal from './Modal';
-
 
 export default function Content() {
   const [devices, setDevices] = React.useState([]);
@@ -16,6 +15,7 @@ export default function Content() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [openModal, setOpenModal] = React.useState(false)
+  const jwtToken = useSelector((state)=>state.user.jwtToken);
 
   const checkBoxHandler = (deviceId) => {
     setCheckBoxSelection((prevState) => {
@@ -43,8 +43,7 @@ export default function Content() {
 
   const loadScript = async () => {
     try {
-      const response = await fetchDevices();
-      console.log(response);
+      const response = await fetchDevices(jwtToken);
       setDevices(response);
       const script = document.createElement("script");
       script.src = `js/content.js`;
@@ -57,7 +56,7 @@ export default function Content() {
 
   const reloadDevices = async () => {
     try {
-      const response = await fetchDevices();
+      const response = await fetchDevices(jwtToken);
       setDevices(response);
     } catch (error) {
       console.error('Error reloading devices:', error);

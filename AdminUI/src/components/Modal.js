@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { NotifyErrorToast } from "../data/ToastData";
+import { useSelector } from "react-redux";
 
 export default function Modal(props) {
     const initialFormValues = {
@@ -11,7 +12,7 @@ export default function Modal(props) {
     }
 
     const [formData, setFormData] = useState(initialFormValues);
-
+    const jwtToken = useSelector((state)=>state.user.jwtToken);
     const modalRef = useRef(null);
 
     useEffect(() => {
@@ -36,6 +37,7 @@ export default function Modal(props) {
             const response = await fetch('http://localhost:8080/api/routers', {
                 method: 'POST',
                 headers: {
+                    'Authorization': `Bearer ${jwtToken}`,
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(formData),

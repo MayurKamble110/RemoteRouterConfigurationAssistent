@@ -18,5 +18,4 @@ public class NewDevice {
     private String password;
 
     private String enablePassword;
-
 }
