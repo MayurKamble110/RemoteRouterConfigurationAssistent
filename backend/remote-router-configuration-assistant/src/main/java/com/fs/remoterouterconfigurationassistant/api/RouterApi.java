@@ -9,6 +9,7 @@ import java.util.Optional;
 import com.fs.remoterouterconfigurationassistant.databases.NetworkDeviceRepository;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -72,14 +73,16 @@ public class RouterApi {
     }
 
     @PostMapping(path = "")
+    @PreAuthorize("hasRole('ADMIN')")
     public String addDevice(@RequestBody NewDevice newDevice) {
-
+        System.out.println("Hiiii");
         routerApiService.addNewNetworkDevice(newDevice);
 
         return "1";
     }
 
     @GetMapping(path = "")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<NetworkDeviceDao> getAllRouterData() {
         List<NetworkDeviceDao> networkDeviceDaoList = routerApiService.getAllNetworkDevices();
         System.out.println(networkDeviceDaoList);

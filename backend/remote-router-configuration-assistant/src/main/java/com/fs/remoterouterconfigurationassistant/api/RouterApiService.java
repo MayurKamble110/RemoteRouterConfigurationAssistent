@@ -22,8 +22,11 @@ import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 
+import org.apache.catalina.core.ApplicationContext;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.client.ResourceAccessException;
@@ -124,9 +127,11 @@ public class RouterApiService {
     }
 
     public void addNewNetworkDevice(NewDevice newDevice) {
-
-        User user = userRepository.getReferenceById(newDevice.getUserEmail());
-
+        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        System.out.println(email);
+        User user = userRepository.getReferenceById(email);
+        System.out.println(user);
         NetworkDeviceDao dao = NetworkDeviceDao.builder()
                         .deviceName(newDevice.getDeviceName())
                         .ipAddress(newDevice.getIpAddress())
@@ -141,7 +146,10 @@ public class RouterApiService {
     }
 
     public List<NetworkDeviceDao> getAllNetworkDevices() {
-        return networkDeviceRepository.findAll();
+        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        System.out.println(email);
+        return networkDeviceRepository.findAllRoutersByUserAccount(email);
     }
 
     public InterfaceData getInterfacesByDeviceId(long deviceId) {
