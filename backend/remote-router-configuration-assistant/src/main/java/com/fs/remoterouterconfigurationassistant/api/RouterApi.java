@@ -73,6 +73,7 @@ public class RouterApi {
 
     @PostMapping(path = "")
     public String addDevice(@RequestBody NewDevice newDevice) {
+
         routerApiService.addNewNetworkDevice(newDevice);
 
         return "1";

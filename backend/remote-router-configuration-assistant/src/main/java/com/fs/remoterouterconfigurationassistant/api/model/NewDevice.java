@@ -19,4 +19,5 @@ public class NewDevice {
 
     private String enablePassword;
 
+    private String userEmail;
 }

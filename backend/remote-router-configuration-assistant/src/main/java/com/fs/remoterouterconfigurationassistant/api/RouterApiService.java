@@ -8,6 +8,8 @@ import com.fs.remoterouterconfigurationassistant.api.model.CpuProcessHistoryDto;
 import com.fs.remoterouterconfigurationassistant.api.model.InterfaceData;
 import com.fs.remoterouterconfigurationassistant.api.model.NewDevice;
 import com.fs.remoterouterconfigurationassistant.api.routerCommands.RouterCommandInterpreter;
+import com.fs.remoterouterconfigurationassistant.auth.dao.UserRepository;
+import com.fs.remoterouterconfigurationassistant.auth.entities.User;
 import com.fs.remoterouterconfigurationassistant.databases.DeviceInterfaceRepository;
 import com.fs.remoterouterconfigurationassistant.databases.NetworkDeviceRepository;
 import com.fs.remoterouterconfigurationassistant.databases.NetworkDeviceRepositoryService;
@@ -53,6 +55,9 @@ public class RouterApiService {
 
     @Autowired
     DeviceInterfaceRepository deviceInterfaceRepository;
+
+    @Autowired
+    UserRepository userRepository;
 
     public boolean connectToRouter(RouterAccessDetails accessDetails) {
         String username = accessDetails.getUsername();
@@ -119,12 +124,16 @@ public class RouterApiService {
     }
 
     public void addNewNetworkDevice(NewDevice newDevice) {
+
+        User user = userRepository.getReferenceById(newDevice.getUserEmail());
+
         NetworkDeviceDao dao = NetworkDeviceDao.builder()
                         .deviceName(newDevice.getDeviceName())
                         .ipAddress(newDevice.getIpAddress())
                         .username(newDevice.getUsername())
                         .password(newDevice.getPassword())
                         .enablePassword(newDevice.getEnablePassword())
+                        .user(user)
                         .build();
 
         networkDeviceRepositoryService.addNetworkDeviceToDatabase(dao);

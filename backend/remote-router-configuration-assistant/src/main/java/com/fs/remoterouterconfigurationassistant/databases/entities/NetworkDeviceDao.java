@@ -1,10 +1,14 @@
 package com.fs.remoterouterconfigurationassistant.databases.entities;
 
+import com.fs.remoterouterconfigurationassistant.auth.entities.User;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -58,6 +62,10 @@ public class NetworkDeviceDao {
 
     @Column(name = "parsed_cpu_processes_history",columnDefinition = "VARCHAR(5000) DEFAULT 'N/A'")
     private String parsedCpuProcessesHistory;
+
+    @ManyToOne
+    @JoinColumn(name = "email_id")
+    private User user;
 
     @Override
     public String toString() {
